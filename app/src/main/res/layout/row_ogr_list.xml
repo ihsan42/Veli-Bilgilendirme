@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rowOgrList"
+    android:layout_width="match_parent"
+    android:layout_height="85dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorMyLightGreen"
+        android:layout_height="80dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        android:weightSum="220">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="100"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtOkulNo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:rotation="270"
+                android:text="2578"
+                android:textColor="@android:color/black"
+                android:textSize="13dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="45"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="15"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtAdSoyad"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="MEHMET"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtVeliAdi"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="13"
+                    android:gravity="center_vertical"
+                    android:text="HASAN"
+                    android:textColor="@android:color/black"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/txtTelNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="12"
+                    android:gravity="center_vertical"
+                    android:text="TEL: 05373408152"
+                    android:textColor="@android:color/black"
+                    android:textSize="12dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="75"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="3dp"
+                android:layout_weight="50"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkBoxButtonIzinli"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="20"
+                    android:button="@drawable/checbox_selector"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:text="İzin"
+                    android:textColor="@android:color/black"
+                    android:textSize="10dp"
+                    android:visibility="invisible" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxButtonRaporlu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="20"
+                    android:button="@drawable/checbox_selector"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:text="Rapor"
+                    android:textColor="@android:color/black"
+                    android:textSize="10dp"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkBoxGec"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="40"
+                    android:button="@drawable/checbox_selector"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:text="Geç"
+                    android:textColor="@android:color/black"
+                    android:textSize="11dp" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxYok"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="40"
+                    android:button="@drawable/checbox_selector"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:text="Yok"
+                    android:textColor="@android:color/black"
+                    android:textSize="11dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

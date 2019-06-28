@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorMyLightGreen"
+    >
+
+    <TextView
+        android:id="@+id/textViewSinifEklemeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/colorMyDarkGreen"
+        android:fontFamily="serif"
+        android:gravity="center_vertical"
+        android:text="Sınıf Ekleme"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="28dp"
+        android:textStyle="italic" />
+
+    <EditText
+        android:id="@+id/editTextSinifEkleme"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="90dp"
+        android:layout_marginRight="10dp"
+        android:background="@android:color/white"
+        android:ems="10"
+        android:hint="Sınıf adını buraya yazınız..."
+        android:inputType="textMultiLine|textPersonName"
+        android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/buttonSinifEklemeTamam"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="257dp"
+        android:background="@drawable/ic_check_circle_black_24dp" />
+
+    <Button
+        android:id="@+id/buttonSinifEklemeIptal"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="257dp"
+        android:background="@drawable/ic_cancel_black_24dp" />
+
+</RelativeLayout>

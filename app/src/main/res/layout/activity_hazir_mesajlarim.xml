@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HazirMesajlarim">
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text='"Okul adı" öğrencilerinden "Öğrenci adı-soyadı" ...'
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="8pt"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextHazirMesajim"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/textView8"
+        android:layout_alignParentStart="true"
+        android:ems="10"
+        android:hint="Mesajın devamını buraya yazınız..."
+        android:inputType="textMultiLine" />
+
+    <Button
+        android:id="@+id/buttonMesajiKaydet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextHazirMesajim"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:text="Mesajı Kaydet" />
+
+    <ListView
+        android:id="@+id/listViewKayitliMesajlarim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textView13"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/buttonMesajiKaydet"
+        android:background="@color/colorMyDarkGreen"
+        android:gravity="center"
+        android:text="Kayıtlı Hazır Mesajlarım"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+</RelativeLayout>

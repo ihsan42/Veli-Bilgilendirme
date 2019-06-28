@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorMyLightGreen">
+
+    <EditText
+        android:id="@+id/editTextTelNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewTelNo"
+        android:ems="10"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editTextOgrNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewOgrNo"
+        android:ems="10"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editTextVeliAd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewVeliAdi"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:textColor="@android:color/black"
+        android:id="@+id/textViewTelNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editTextOgrNo"
+        android:text="Telefon Numarası(11 Haneli)"
+        android:textSize="20dp" />
+
+    <TextView
+        android:textColor="@android:color/black"
+        android:id="@+id/textViewOgrNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editTextVeliAd"
+        android:text="Öğrenci No"
+        android:textSize="20dp" />
+
+    <TextView
+        android:textColor="@android:color/black"
+        android:id="@+id/textViewVeliAdi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editTextAdSoyad"
+        android:text="Veli Adı"
+        android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/editTextAdSoyad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewAdSoyad"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:textColor="@android:color/black"
+        android:id="@+id/textViewAdSoyad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Ad Soyad"
+        android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/buttonOk"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/editTextTelNo"
+        android:layout_marginEnd="71dp"
+        android:background="@drawable/ic_check_circle_black_24dp" />
+
+    <Button
+        android:id="@+id/buttonCancel"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/editTextTelNo"
+        android:layout_marginEnd="194dp"
+        android:background="@drawable/ic_cancel_black_24dp" />
+</RelativeLayout>
