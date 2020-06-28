@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PdfdenListeAl">
+
+    <Button
+        android:id="@+id/buttonPdfListFile"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/ic_folder_black_24dp"
+        android:textSize="20dp" />
+
+    <Button
+        android:layout_marginTop="5dp"
+        android:id="@+id/buttonPdfListSave"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="72dp"
+        android:background="@drawable/ic_save_black_24dp"
+        android:textSize="20dp" />
+
+    <LinearLayout
+        android:id="@+id/toolbarPdfList"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorMyDarkGreen"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonPdfListHome"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:background="@drawable/ic_arrow_back_black_24dp" />
+
+    <ListView
+        android:id="@+id/listViewPdfList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="55dp" />
+
+    <TextView
+        android:id="@+id/textViewTitlePdfList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/toolbarPdfList"
+        android:layout_marginStart="-5dp"
+        android:layout_toEndOf="@+id/buttonPdfListHome"
+        android:background="@color/colorMyDarkGreen"
+        android:text="Pdf'den Liste Al"
+        android:textColor="@android:color/black"
+        android:textSize="20dp"
+        android:visibility="visible" />
+
+</RelativeLayout>

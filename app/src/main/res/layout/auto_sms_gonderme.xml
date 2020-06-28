@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Spinner
+        android:id="@+id/spinnerDersler"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="155dp"
+        android:spinnerMode="dropdown"
+        android:visibility="invisible" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="260dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewMesajGonderilecekler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="205dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonIptalAutoSMS"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="İptal" />
+
+        <Button
+            android:id="@+id/buttonGonderAutoSMS"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Gönder" />
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/radioGroupSMS"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="55dp"
+        android:checkedButton="@+id/radioButtonOkula">
+
+        <RadioButton
+            android:id="@+id/radioButtonOkula"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Okula gelmedi/geç geldi." />
+
+        <RadioButton
+            android:id="@+id/radioButtonDerse"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Derse girmedi/geç geldi. (Ders seç)" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/colorMyDarkGreen"
+        android:gravity="center"
+        android:text="Sms Gönderilsin mi?"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+</RelativeLayout>
