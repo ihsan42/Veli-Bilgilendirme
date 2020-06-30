@@ -6,46 +6,53 @@
     android:layout_height="match_parent"
     tools:context=".Siniflar">
 
-    <LinearLayout
-        android:id="@+id/toolbarSiniflar"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@color/colorMyDarkGreen"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:gravity="center"
-            android:text="Sınıflar"
-            android:textColor="@android:color/black"
-            android:textSize="20dp" />
-
-    </LinearLayout>
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabLayout"
+        android:layout_marginBottom="@dimen/toolbar_size"/>
 
     <Button
         android:id="@+id/buttonSiniflarAdd"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_alignBottom="@+id/toolbarSiniflar"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
         android:background="@drawable/ic_add_black_24dp" />
 
     <com.google.android.material.tabs.TabLayout
-        android:background="@color/colorMyDarkGreen"
+        android:background="@color/colorPrimaryDark"
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="55dp">
+        app:tabTextColor="@color/colorTitleText"
+        android:layout_height="35dp"
+        android:layout_marginTop="35dp">
 
     </com.google.android.material.tabs.TabLayout>
+
+    <include
+    layout="@layout/title_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
+    android:layout_alignParentTop="true" />
+
+
+    <fragment
+        android:id="@+id/fragmentMenu"
+        android:name="com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.MenuContentFragment"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/toolbar_size"/>
+
+    <include
+        layout="@layout/menu_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_size"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

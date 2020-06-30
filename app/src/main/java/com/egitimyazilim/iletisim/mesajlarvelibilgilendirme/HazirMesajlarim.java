@@ -6,6 +6,9 @@ import android.content.DialogInterface;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -19,8 +22,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HazirMesajlarim extends AppCompatActivity {
+public class HazirMesajlarim extends AppCompatActivity implements MenuContentComm {
 
+    FragmentManager fm;
+    Button buttonMenuOpen;
+    Button buttonMenuClose;
+    MenuContentFragment menuContentFragment;
     ListView listViewKayitliMesajlar;
     List<String> kayitliMesajlarim;
 
@@ -30,7 +37,28 @@ public class HazirMesajlarim extends AppCompatActivity {
         setContentView(R.layout.activity_hazir_mesajlarim);
 
         ActionBar bar=getSupportActionBar();
-        bar.setTitle("Hazır Mesajlarım");
+        bar.hide();
+
+        buttonMenuOpen=(Button)findViewById(R.id.buttonMenuOpen);
+        buttonMenuClose=(Button)findViewById(R.id.buttonMenuClose);
+
+        fm = getSupportFragmentManager();
+        menuContentFragment=(MenuContentFragment)fm.findFragmentById(R.id.fragmentMenu);
+        fm.beginTransaction().hide(menuContentFragment).commit();
+
+        buttonMenuOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuButtonsVisibilitySecond();
+            }
+        });
+
+        buttonMenuClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuButtonsVisibilityFirst();
+            }
+        });
 
         final EditText editTextHazirMesajim=(EditText)findViewById(R.id.editTextHazirMesajim);
         listViewKayitliMesajlar=(ListView)findViewById(R.id.listViewKayitliMesajlarim);
@@ -113,7 +141,7 @@ public class HazirMesajlarim extends AppCompatActivity {
         kayitliMesajlarim=vt.hazirMesajlarimiGetir();
         vt.close();
         if(kayitliMesajlarim.size()>0){
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.custom_spinner_ders, kayitliMesajlarim);
+            AdapterForOkutulanDersler adapter = new AdapterForOkutulanDersler(getApplicationContext(), kayitliMesajlarim);
             listViewKayitliMesajlar.setAdapter(adapter);
         }else{
             listViewKayitliMesajlar.setAdapter(null);
@@ -126,5 +154,46 @@ public class HazirMesajlarim extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
+    }
+
+    private void menuButtonsVisibilitySecond(){
+        fm.beginTransaction().show(menuContentFragment).commit();
+        buttonMenuOpen.setVisibility(View.INVISIBLE);
+        buttonMenuClose.setVisibility(View.VISIBLE);
+    }
+
+    private void menuButtonsVisibilityFirst(){
+        fm.beginTransaction().hide(menuContentFragment).commit();
+        buttonMenuOpen.setVisibility(View.VISIBLE);
+        buttonMenuClose.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void menuButtonsVisibility() {
+        menuButtonsVisibilityFirst();
+    }
+
+    @Override
+    public void onBackPressed() {
+        androidx.appcompat.app.AlertDialog.Builder builder=new androidx.appcompat.app.AlertDialog.Builder(HazirMesajlarim.this);
+        builder.setTitle("Uygulamadan çıkılsın mı?");
+        builder.setPositiveButton("Çıkış", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent a = new Intent(Intent.ACTION_MAIN);
+                a.addCategory(Intent.CATEGORY_HOME);
+                a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(a);
+                finishAffinity();
+            }
+        });
+        builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        androidx.appcompat.app.AlertDialog alertDialog=builder.create();
+        alertDialog.show();
     }
 }

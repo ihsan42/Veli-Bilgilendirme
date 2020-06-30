@@ -51,7 +51,7 @@
 
             <CheckBox
                 android:id="@+id/checkBoxYoklamaSil"
-                android:button="@drawable/checbox_selector"
+                android:button="@drawable/checbox_selector_black"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>

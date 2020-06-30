@@ -18,9 +18,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="@drawable/right_background"
-            android:padding="2dp"
+            android:padding="5dp"
             android:text="hello"
-            android:textColor="#fff"
+            android:textColor="#ff000000"
             android:textSize="18sp" />
 
         <TextView
@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/msg_show"
             android:layout_alignParentRight="true"
+            android:background="@drawable/right_background"
             android:paddingRight="2dp"
             android:text="date"
             android:textColor="@android:color/black"

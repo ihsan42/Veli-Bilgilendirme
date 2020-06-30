@@ -6,54 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".Siniflar">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textTit"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_weight="5"
-        android:background="@color/colorMyDarkGreen"
-        android:orientation="vertical">
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:text="Mesajlar"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorTitleText"
+        android:textSize="18dp"
+        android:textStyle="bold" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                app:srcCompat="@mipmap/ic_launcher_my_appicon" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:gravity="center"
-                android:text="Mesajlar"
-                android:textColor="@android:color/black"
-                android:textSize="23dp"
-                android:textStyle="bold" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
+    <com.google.android.material.tabs.TabLayout
+        android:background="@color/colorPrimaryDark"
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:tabTextColor="@color/colorTitleText"
+        app:tabIndicatorColor="@color/colorAccent"
+        android:layout_below="@id/textTit"/>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pagerMesajlar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="105dp"/>
+        android:layout_below="@id/tabLayout"
+        android:layout_marginBottom="@dimen/toolbar_size"/>
 
-    <com.google.android.material.tabs.TabLayout
-        android:background="@color/colorMyDarkGreen"
-        android:id="@+id/tabLayout"
+    <fragment
+        android:id="@+id/fragmentMenu"
+        android:name="com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.MenuContentFragment"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/toolbar_size" />
+
+    <include
+        android:id="@+id/toolbarKisBil"
+        layout="@layout/menu_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="50dp">
+        android:layout_height="@dimen/toolbar_size"
+        android:layout_alignParentBottom="true" />
 
-    </com.google.android.material.tabs.TabLayout>
 
 </RelativeLayout>

@@ -10,6 +10,8 @@
         android:layout_below="@id/checkBoxBirDahaGösterme"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorTitleText"
         android:text="Kapat" />
 
     <CheckBox
@@ -26,11 +28,11 @@
         android:id="@+id/textView15"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorMyDarkGreen"
+        android:background="@color/colorPrimaryDark"
         android:gravity="center"
         android:text="DİKKAT!"
-        android:textColor="@android:color/black"
-        android:textSize="30dp"
+        android:textColor="@color/colorTitleText"
+        android:textSize="25dp"
         android:textStyle="bold" />
 
     <TextView

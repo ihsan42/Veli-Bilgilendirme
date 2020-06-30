@@ -6,27 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".YoklamaKayitlari">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_below="@id/textViewYokKayit"
-        android:layout_marginLeft="3dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginRight="55dp"
-        android:layout_marginBottom="3dp"
-        android:background="@color/colorMyDarkGreen">
-
-    </RelativeLayout>
-
     <TextView
         android:id="@+id/textViewYokKayit"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/colorMyDarkGreen"
+        android:layout_height="35dp"
+        android:background="@color/colorPrimaryDark"
         android:gravity="center"
         android:text="Yoklama Kayıtları"
-        android:textColor="@android:color/black"
+        android:textColor="@color/colorTitleText"
         android:textSize="20dp" />
+
 
     <ListView
         android:id="@+id/listViewYokKayit"
@@ -40,10 +29,9 @@
         android:layout_height="55dp"
         android:gravity="center"
         android:layout_below="@id/textViewYokKayit"
-        android:layout_marginLeft="3dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginRight="55dp"
-        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
         android:spinnerMode="dropdown"
         android:textAlignment="center" />
 
@@ -53,12 +41,25 @@
         style="@android:style/Widget.Button"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@id/textViewYokKayit"
-        android:layout_marginTop="8dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:background="@drawable/ic_delete_black_24dp" />
+
+    <fragment
+        android:id="@+id/fragmentMenu"
+        android:name="com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.MenuContentFragment"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/toolbar_size"/>
+
+    <include
+        layout="@layout/menu_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_size"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

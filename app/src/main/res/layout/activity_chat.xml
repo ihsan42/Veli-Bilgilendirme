@@ -4,7 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorMyLightGreen"
     tools:context=".ComposeSmsActivity">
+
+    <TextView
+        android:id="@+id/textViewChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorTitleText"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center"
+        android:textSize="15dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recylerViewChat"
@@ -28,8 +38,8 @@
         android:id="@+id/message_status_text_view2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_below="@id/textViewChat"
         android:layout_gravity="center_vertical|center_horizontal"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/holo_red_dark" />

@@ -48,7 +48,6 @@
     </RadioGroup>
 
     <TextView
-        android:id="@+id/textView10"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@color/colorMyDarkGreen"

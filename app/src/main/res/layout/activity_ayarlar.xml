@@ -1,176 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ayarlar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical"
     tools:context=".Ayarlar">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_marginBottom="@dimen/toolbar_size">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="3dp"
-            android:layout_marginTop="3dp"
-            android:layout_weight="2"
-            android:background="@color/colorMyLightGreen"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-            <Button
-                android:id="@+id/buttonAyarHazirMesajlarim"
-                style="@android:style/Widget.DeviceDefault.Button.Borderless"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Hazır Mesajlarım" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="3dp"
-            android:layout_weight="2"
-            android:background="@color/colorMyLightGreen"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/buttonAyarBilgilerim"
-                style="@android:style/Widget.DeviceDefault.Button.Borderless"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Bilgilerim" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="3dp"
-            android:layout_weight="2"
-            android:background="@color/colorMyLightGreen"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/buttonAyarYedekle"
-                style="@android:style/Widget.DeviceDefault.Button.Borderless"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Yedekle" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="3dp"
-            android:layout_weight="2"
-            android:background="@color/colorMyLightGreen"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/buttonAyarYedektenAl"
-                style="@android:style/Widget.DeviceDefault.Button.Borderless"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Yedekten Al" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView9"
+                    android:id="@+id/textView2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:text="Kişisel Ayarlar"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <Switch
-                    android:id="@+id/switchIsim"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="10dp"
-                    android:text="Gönderilen SMS'lere ismim eklensin" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <Switch
-                    android:id="@+id/switchBrans"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="10dp"
-                    android:text="Gönderilen SMS'lere branşım eklensin" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                    android:layout_height="40dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:text="Ayarlar"
+                    android:textColor="@color/colorTitleText"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="18dp" />
 
                 <Switch
                     android:id="@+id/switchOkulAdi"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_below="@id/textView2"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp"
                     android:paddingLeft="10dp"
                     android:text="Gönderilen SMS'lere okul ismi eklensin" />
 
-            </LinearLayout>
+                <Switch
+                    android:id="@+id/switchIsim"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp"
+                    android:layout_below="@id/switchOkulAdi"
+                    android:paddingLeft="10dp"
+                    android:text="Gönderilen SMS'lere ismim eklensin" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                <Switch
+                    android:id="@+id/switchBrans"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp"
+                    android:layout_below="@id/switchIsim"
+                    android:paddingLeft="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="Gönderilen SMS'lere branşım eklensin" />
+
+                <Button
+                    android:id="@+id/buttonAyarYedektenAl"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textSize="15dp"
+                    android:textColor="@color/colorTitleText"
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_margin="5dp"
+                    android:layout_below="@id/switchBrans"
+                    android:text="Yedekten Al" />
+
+                <Button
+                    android:id="@+id/buttonAyarYedekle"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textSize="15dp"
+                    android:textColor="@color/colorTitleText"
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_margin="5dp"
+                    android:layout_below="@id/buttonAyarYedektenAl"
+                    android:text="Yedekle" />
 
                 <Button
                     android:id="@+id/buttonAyarExcelTaslak"
-                    style="@android:style/Widget.DeviceDefault.Button.Borderless"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/colorMyLightGreen"
+                    android:layout_height="50dp"
+                    android:textSize="15dp"
+                    android:textColor="@color/colorTitleText"
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_margin="5dp"
+                    android:layout_below="@id/buttonAyarYedekle"
                     android:text="Sınıf Listesi İçin Excel Taslağı İndir" />
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-            </LinearLayout>
-
+            </RelativeLayout>
         </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
+    </ScrollView>
+
+    <fragment
+        android:id="@+id/fragmentMenu"
+        android:name="com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.MenuContentFragment"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/toolbar_size" />
+
+    <include
+        android:id="@+id/toolbarKisBil"
+        layout="@layout/menu_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_size"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

@@ -18,11 +18,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
-public class Siniflar extends AppCompatActivity implements CommSinif {
+public class Siniflar extends AppCompatActivity implements CommSinif , MenuContentComm {
 
     ViewPager viewPager;
     TabPageAdapter tabPageAdapter;
+    FragmentManager fm;
+    Button buttonMenuOpen;
+    Button buttonMenuClose;
+    MenuContentFragment menuContentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,29 @@ public class Siniflar extends AppCompatActivity implements CommSinif {
 
         ActionBar bar = getSupportActionBar();
         bar.hide();
+
+        buttonMenuOpen=(Button)findViewById(R.id.buttonMenuOpen);
+        buttonMenuClose=(Button)findViewById(R.id.buttonMenuClose);
+        TextView textView=(TextView)findViewById(R.id.textViewTitleToolbar);
+        textView.setText("Sınıflar");
+
+        fm = getSupportFragmentManager();
+        menuContentFragment=(MenuContentFragment)fm.findFragmentById(R.id.fragmentMenu);
+        fm.beginTransaction().hide(menuContentFragment).commit();
+
+        buttonMenuOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuButtonsVisibilitySecond();
+            }
+        });
+
+        buttonMenuClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuButtonsVisibilityFirst();
+            }
+        });
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
@@ -93,6 +121,23 @@ public class Siniflar extends AppCompatActivity implements CommSinif {
                 alertDialog.show();
             }
         });
+    }
+
+    private void menuButtonsVisibilitySecond(){
+        fm.beginTransaction().show(menuContentFragment).commit();
+        buttonMenuOpen.setVisibility(View.INVISIBLE);
+        buttonMenuClose.setVisibility(View.VISIBLE);
+    }
+
+    private void menuButtonsVisibilityFirst(){
+        fm.beginTransaction().hide(menuContentFragment).commit();
+        buttonMenuOpen.setVisibility(View.VISIBLE);
+        buttonMenuClose.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void menuButtonsVisibility() {
+        menuButtonsVisibilityFirst();
     }
 
     @Override
@@ -157,9 +202,26 @@ public class Siniflar extends AppCompatActivity implements CommSinif {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        Intent ıntent=new Intent(getApplicationContext(),MainActivity.class);
-        startActivity(ıntent);
-        finish();
+        AlertDialog.Builder builder=new AlertDialog.Builder(Siniflar.this);
+        builder.setTitle("Uygulamadan çıkılsın mı?");
+        builder.setPositiveButton("Çıkış", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent a = new Intent(Intent.ACTION_MAIN);
+                a.addCategory(Intent.CATEGORY_HOME);
+                a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(a);
+                finishAffinity();
+            }
+        });
+        builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        AlertDialog alertDialog=builder.create();
+        alertDialog.show();
     }
+
 }

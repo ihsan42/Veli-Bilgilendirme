@@ -4,31 +4,49 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center"
+        android:textColor="@color/colorTitleText"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Yoklama Geçmişi" />
+
+    <TextView
         android:id="@+id/textViewYokKaySil"
         android:layout_width="match_parent"
-        android:layout_height="105dp"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="50dp"
-        android:background="@color/colorMyDarkGreen" />
+        android:layout_height="80dp"
+        android:layout_below="@id/textView5"
+        android:background="@color/colorPrimaryDark" />
+
+    <Button
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/textView5"
+        android:id="@+id/buttonYokKaySil"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/ic_delete_black_24dp" />
 
     <Button
         android:id="@+id/buttonYokKayVeliBilg"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_below="@id/textView5"
         android:background="@drawable/ic_mail_black_24dp" />
 
-    <TextView
-        android:background="@color/colorMyDarkGreen"
-        android:gravity="center"
-        android:textColor="@android:color/black"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:id="@+id/textView5"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Yoklama Geçmişi" />
+    <Button
+        android:id="@+id/buttonYokKayCancel"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_below="@id/textView5"
+        android:background="@drawable/ic_cancel_white_24dp" />
+
 
     <TextView
         android:id="@+id/textViewBilgi"
@@ -44,10 +62,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
+        android:layout_below="@id/buttonYokKayVeliBilg"
         android:button="@drawable/checbox_selector"
         android:text="Seçimi Kaldır"
-        android:textColor="@android:color/black"
+        android:textColor="@color/colorTitleText"
         android:visibility="invisible" />
 
     <CheckBox
@@ -56,32 +74,14 @@
         android:layout_height="wrap_content"
         android:button="@drawable/checbox_selector"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
+        android:layout_below="@id/buttonYokKayVeliBilg"
         android:text="Tümünü Seç"
-        android:textColor="@android:color/black"
+        android:textColor="@color/colorTitleText"
         android:visibility="visible" />
-
-    <Button
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="50dp"
-        android:id="@+id/buttonYokKaySil"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/ic_delete_black_24dp" />
-
-    <Button
-        android:id="@+id/buttonYokKayCancel"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/ic_cancel_black_24dp" />
 
     <ListView
         android:id="@+id/listviewYokKaySil"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="155dp" />
+        android:layout_below="@id/textViewYokKaySil"/>
 </RelativeLayout>

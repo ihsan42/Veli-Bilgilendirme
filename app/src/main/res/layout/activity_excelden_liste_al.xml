@@ -6,13 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".ExceldenListeAl">
 
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="TextView" />
+
     <EditText
         android:id="@+id/editTextExceldenSinifAdi"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginRight="130dp"
+        android:layout_margin="5dp"
+        android:layout_height="40dp"
+        android:paddingLeft="5dp"
+        android:layout_toLeftOf="@id/buttonExceldenKaydet"
         android:layout_marginBottom="10dp"
+        android:background="@color/colorTitleText"
+        android:textColor="@android:color/black"
         android:ems="10"
         android:hint="Sınıf adını giriniz..."
         android:inputType="textPersonName" />
@@ -21,11 +31,10 @@
         android:id="@+id/buttonExceldenSec"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/ic_directory"
+        android:background="@drawable/ic_folder_black_24dp"
         android:text="SEÇ"
         android:textColor="@android:color/holo_red_light"
         android:textSize="12dp"
@@ -35,10 +44,10 @@
         android:id="@+id/buttonExceldenKaydet"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_marginBottom="10dp"
-        android:layout_marginRight="80dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@id/buttonExceldenSec"
         android:background="@drawable/ic_save_black_24dp"
         android:paddingBottom="5dp"
         android:text="KAYDET"
@@ -48,8 +57,23 @@
 
     <ListView
         android:id="@+id/listViewExceldenAl"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/textView9"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"/>
+        android:layout_marginBottom="@dimen/toolbar_size"/>
+
+    <fragment
+        android:id="@+id/fragmentMenu"
+        android:name="com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.MenuContentFragment"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/toolbar_size"/>
+
+    <include
+        layout="@layout/menu_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_size"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

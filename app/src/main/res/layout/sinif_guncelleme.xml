@@ -6,46 +6,47 @@
     >
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textViewSinifGuncellemeTitle"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/colorMyDarkGreen"
-        android:fontFamily="serif"
+        android:layout_height="60dp"
+        android:background="@color/colorPrimary"
         android:gravity="center_vertical"
         android:text="Sınıf Güncelleme"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="28dp"
-        android:textStyle="italic"/>
+        android:textColor="@color/colorTitleText"
+        android:textSize="20dp"
+        android:textStyle="italic" />
 
     <EditText
         android:id="@+id/editTextSinifGuncelleme"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="100dp"
+        android:layout_below="@id/textViewSinifGuncellemeTitle"
         android:layout_marginRight="10dp"
-        android:background="@android:color/white"
+        android:paddingLeft="10dp"
+        android:background="@color/colorTitleText"
         android:ems="10"
         android:hint="Sınıfın yeni adını buraya yazınız..."
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine|textPersonName"
         android:textSize="20dp" />
 
     <Button
         android:id="@+id/buttonSinifGuncellemeTamam"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="200dp"
-        android:layout_marginTop="187dp"
+        android:layout_below="@id/editTextSinifGuncelleme"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
         android:background="@drawable/ic_check_circle_black_24dp" />
 
     <Button
         android:id="@+id/buttonSinifGuncellemeIptal"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginStart="105dp"
-        android:layout_marginTop="187dp"
+        android:layout_toLeftOf="@id/buttonSinifGuncellemeTamam"
+        android:layout_below="@id/editTextSinifGuncelleme"
+        android:layout_marginRight="40dp"
         android:background="@drawable/ic_cancel_black_24dp" />
 
 </RelativeLayout>

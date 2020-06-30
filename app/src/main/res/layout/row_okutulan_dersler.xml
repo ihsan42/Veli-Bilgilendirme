@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/toolbar_size">
+
+        <TextView
+            android:id="@+id/textViewRowMenuContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="10dp"
+            android:text="Activity Name"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textSize="18dp"
+            android:textStyle="italic"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/colorMyLightGreen"/>
+
+</RelativeLayout>

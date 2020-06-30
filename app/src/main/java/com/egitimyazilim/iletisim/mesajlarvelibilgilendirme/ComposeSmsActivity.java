@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.telephony.SmsManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -66,56 +67,74 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
         setContentView(R.layout.activity_chat);
 
         //listViewChat=(ListView) findViewById(R.id.listViewChat);
-        recyclerView=(RecyclerView)findViewById(R.id.recylerViewChat);
+        recyclerView = (RecyclerView) findViewById(R.id.recylerViewChat);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        editTextMesaj=(EditText)findViewById(R.id.message_edit_text);
+        editTextMesaj = (EditText) findViewById(R.id.message_edit_text);
         //editTextAlici=(EditText)findViewById(R.id.phone_number_edit_text);
-        buttonGonder=(Button)findViewById(R.id.send_button);
-        sendStatusTextView=(TextView)findViewById(R.id.message_status_text_view2);
+        buttonGonder = (Button) findViewById(R.id.send_button);
+        sendStatusTextView = (TextView) findViewById(R.id.message_status_text_view2);
+        TextView textViewTitle = (TextView) findViewById(R.id.textViewChat);
 
-        Intent ıntent=getIntent();
-        kisiTel=ıntent.getStringExtra("telno");
-        String name=ıntent.getStringExtra("name");
-        ActionBar bar =getSupportActionBar();
-        if(name==null){
-            bar.setTitle(kisiTel);
-        }else{
-            bar.setTitle(name);
+        Intent ıntent = getIntent();
+        kisiTel = ıntent.getStringExtra("telno");
+        String name = ıntent.getStringExtra("name");
+        ActionBar bar = getSupportActionBar();
+        bar.hide();
+
+        String title = "";
+        if (name == null) {
+            title = kisiTel;
+        } else {
+            title = name + "\n" + kisiTel;
         }
+        textViewTitle.setText(title);
 
         /*String nerdengeldi=ıntent.getStringExtra("listedengelen");
         if(nerdengeldi!=null&&nerdengeldi.equals("listedengelen")){
             editTextAlici.setEnabled(false);
         }*/
-        varsayilanMi=checkDefaultSMSapp();
-        izinlerTamamMi=checkPermission();
+        varsayilanMi = checkDefaultSMSapp();
+        izinlerTamamMi = checkPermission();
 
-        if(varsayilanMi==false){
+        char[] chars = kisiTel.toCharArray();
+
+        boolean durum = false;
+        for (int i = 0; i < chars.length; i++) {
+            String s = String.valueOf(chars[i]);
+            if (s.matches("^[a-zA-Z]")) {
+                durum = true;
+            }
+        }
+        if (durum == true) {
+            buttonGonder.setVisibility(View.GONE);
+            editTextMesaj.setVisibility(View.GONE);
+        }
+
+       /* if(varsayilanMi==false){
             buttonGonder.setVisibility(View.INVISIBLE);
             editTextMesaj.setVisibility(View.INVISIBLE);
         }else {
             buttonGonder.setVisibility(View.VISIBLE);
             editTextMesaj.setVisibility(View.VISIBLE);
-        }
+        }*/
 
         // editTextAlici.setText(kisiTel);
-        if(izinlerTamamMi==true){
-            mCallbacks=this;
-
-            LoaderManager loaderManager=getSupportLoaderManager();
-            loaderManager.initLoader(1,null,mCallbacks);
+        if (izinlerTamamMi == true) {
+            mCallbacks = this;
+            LoaderManager loaderManager = getSupportLoaderManager();
+            loaderManager.initLoader(1, null, mCallbacks);
         }
 
 
         buttonGonder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(varsayilanMi==true&&izinlerTamamMi==true){
+                if (izinlerTamamMi == true) {
                     sendMySMS();
                     sendStatusTextView.setText("");
-                }else{
-                    Toast.makeText(getApplicationContext(),"Sms gönderebilmeniz için bu uygulamanın varsayılan sms uygulaması olması gerekir!",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Sms gönderebilmeniz için eksik izinler var! Lütfen uygulama izinlerini kontrol ediniz.", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -125,10 +144,10 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        varsayilanMi=checkDefaultSMSapp();
-        if (varsayilanMi == false) {
-            Toast.makeText(getApplicationContext(),"Mesaj gönderebilmek için bu uygulamanın varsayılan sms uygulaması olması gerekir!",Toast.LENGTH_LONG).show();
-        }else{
+        //varsayilanMi=checkDefaultSMSapp();
+       // if (varsayilanMi == false) {
+       //     Toast.makeText(getApplicationContext(),"Mesaj gönderebilmek için bu uygulamanın varsayılan sms uygulaması olması gerekir!",Toast.LENGTH_LONG).show();
+       // }else{
             izinlerTamamMi = checkPermission();
             if(izinlerTamamMi==true){
                 mCallbacks=this;
@@ -139,7 +158,7 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
                 Toast.makeText(getApplicationContext(),"Mesajları görüntüleyebilmek için istenilen izinleri vermeniz gerekir!",Toast.LENGTH_LONG).show();
             }
         }
-    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

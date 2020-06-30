@@ -16,6 +16,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -43,12 +45,17 @@ import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 
-public class Ayarlar extends AppCompatActivity {
+public class Ayarlar extends AppCompatActivity implements MenuContentComm {
 
     private static final int requestCodePermissionRead=1990;
     private static final int requestCodePermissionWrite=1991;
     private static final int FILE_SELECT_CODE=55;
 
+
+    FragmentManager fm;
+    Button buttonMenuOpen;
+    Button buttonMenuClose;
+    MenuContentFragment menuContentFragment;
     String filePath;
     List<Ogrenci> ogrenciList;
     List<String> sinifList;
@@ -69,7 +76,28 @@ public class Ayarlar extends AppCompatActivity {
         setContentView(R.layout.activity_ayarlar);
 
         bar = getSupportActionBar();
-        bar.setTitle("Ayarlar");
+        bar.hide();
+
+        buttonMenuOpen=(Button)findViewById(R.id.buttonMenuOpen);
+        buttonMenuClose=(Button)findViewById(R.id.buttonMenuClose);
+
+        fm = getSupportFragmentManager();
+        menuContentFragment=(MenuContentFragment)fm.findFragmentById(R.id.fragmentMenu);
+        fm.beginTransaction().hide(menuContentFragment).commit();
+
+        buttonMenuOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuButtonsVisibilitySecond();
+            }
+        });
+
+        buttonMenuClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuButtonsVisibilityFirst();
+            }
+        });
 
         switchIsim = (Switch) findViewById(R.id.switchIsim);
         switchBrans = (Switch) findViewById(R.id.switchBrans);
@@ -235,15 +263,6 @@ public class Ayarlar extends AppCompatActivity {
             }
         });
 
-        Button buttonHazirMesajlarım = (Button) findViewById(R.id.buttonAyarHazirMesajlarim);
-        buttonHazirMesajlarım.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), HazirMesajlarim.class);
-                startActivity(intent);
-            }
-        });
-
         Button buttonYedekle = (Button) findViewById(R.id.buttonAyarYedekle);
         buttonYedekle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -330,15 +349,6 @@ public class Ayarlar extends AppCompatActivity {
                         alertDialog.show();
                     }
                 }
-            }
-        });
-
-        Button buttonBilgilerim = (Button) findViewById(R.id.buttonAyarBilgilerim);
-        buttonBilgilerim.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), KisiselBilgiler.class);
-                startActivity(intent);
             }
         });
     }
@@ -841,5 +851,46 @@ public class Ayarlar extends AppCompatActivity {
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void menuButtonsVisibilitySecond(){
+        fm.beginTransaction().show(menuContentFragment).commit();
+        buttonMenuOpen.setVisibility(View.INVISIBLE);
+        buttonMenuClose.setVisibility(View.VISIBLE);
+    }
+
+    private void menuButtonsVisibilityFirst(){
+        fm.beginTransaction().hide(menuContentFragment).commit();
+        buttonMenuOpen.setVisibility(View.VISIBLE);
+        buttonMenuClose.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void menuButtonsVisibility() {
+        menuButtonsVisibilityFirst();
+    }
+
+    @Override
+    public void onBackPressed() {
+        androidx.appcompat.app.AlertDialog.Builder builder=new androidx.appcompat.app.AlertDialog.Builder(Ayarlar.this);
+        builder.setTitle("Uygulamadan çıkılsın mı?");
+        builder.setPositiveButton("Çıkış", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent a = new Intent(Intent.ACTION_MAIN);
+                a.addCategory(Intent.CATEGORY_HOME);
+                a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(a);
+                finishAffinity();
+            }
+        });
+        builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        androidx.appcompat.app.AlertDialog alertDialog=builder.create();
+        alertDialog.show();
     }
 }

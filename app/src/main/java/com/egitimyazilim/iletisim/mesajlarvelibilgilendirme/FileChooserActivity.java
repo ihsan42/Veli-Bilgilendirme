@@ -25,7 +25,7 @@ public class FileChooserActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent ıntent=new Intent(getApplicationContext(),MainActivity.class);
+                Intent ıntent=new Intent(getApplicationContext(),Siniflar.class);
                 setResult(60,ıntent);
                 finish();
             }
@@ -36,7 +36,7 @@ public class FileChooserActivity extends AppCompatActivity {
         FileChooser.Builder builder = new FileChooser.Builder(FileChooser.ChooserType.FILE_CHOOSER, new FileChooser.ChooserListener() {
             @Override
             public void onSelect(String path) {
-                Intent ıntent=new Intent(getApplicationContext(),MainActivity.class);
+                Intent ıntent=new Intent(getApplicationContext(),Siniflar.class);
                 ıntent.putExtra("path",path);
                 setResult(55,ıntent);
                 finish();

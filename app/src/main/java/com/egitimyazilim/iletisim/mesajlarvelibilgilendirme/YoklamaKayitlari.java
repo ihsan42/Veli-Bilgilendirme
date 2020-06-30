@@ -5,6 +5,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,13 +14,18 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class YoklamaKayitlari extends AppCompatActivity implements CommYoklama{
+public class YoklamaKayitlari extends AppCompatActivity implements CommYoklama, MenuContentComm{
 
+    FragmentManager fm;
+    Button buttonMenuOpen;
+    Button buttonMenuClose;
+    MenuContentFragment menuContentFragment;
     Spinner spinner;
     ListView listView;
     List<String> sinifList;
@@ -37,6 +44,27 @@ public class YoklamaKayitlari extends AppCompatActivity implements CommYoklama{
 
         ActionBar bar=getSupportActionBar();
         bar.hide();
+
+        buttonMenuOpen=(Button)findViewById(R.id.buttonMenuOpen);
+        buttonMenuClose=(Button)findViewById(R.id.buttonMenuClose);
+
+        fm = getSupportFragmentManager();
+        menuContentFragment=(MenuContentFragment)fm.findFragmentById(R.id.fragmentMenu);
+        fm.beginTransaction().hide(menuContentFragment).commit();
+
+        buttonMenuOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuButtonsVisibilitySecond();
+            }
+        });
+
+        buttonMenuClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuButtonsVisibilityFirst();
+            }
+        });
 
         Veritabani vt=new Veritabani(getApplicationContext());
         sinifList=new ArrayList<>();
@@ -225,5 +253,46 @@ public class YoklamaKayitlari extends AppCompatActivity implements CommYoklama{
         YoklamaGecmisi yoklamaGecmisi =new YoklamaGecmisi();
         yoklamaGecmisi.show(manager,"Yoklama Kayıt Silme");
         yoklamaGecmisi.gelenOgrenci(sinifadi,okulno,adsoyad,telno);
+    }
+
+    private void menuButtonsVisibilitySecond(){
+        fm.beginTransaction().show(menuContentFragment).commit();
+        buttonMenuOpen.setVisibility(View.INVISIBLE);
+        buttonMenuClose.setVisibility(View.VISIBLE);
+    }
+
+    private void menuButtonsVisibilityFirst(){
+        fm.beginTransaction().hide(menuContentFragment).commit();
+        buttonMenuOpen.setVisibility(View.VISIBLE);
+        buttonMenuClose.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void menuButtonsVisibility() {
+        menuButtonsVisibilityFirst();
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder=new AlertDialog.Builder(YoklamaKayitlari.this);
+        builder.setTitle("Uygulamadan çıkılsın mı?");
+        builder.setPositiveButton("Çıkış", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent a = new Intent(Intent.ACTION_MAIN);
+                a.addCategory(Intent.CATEGORY_HOME);
+                a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(a);
+                finishAffinity();
+            }
+        });
+        builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        AlertDialog alertDialog=builder.create();
+        alertDialog.show();
     }
 }

@@ -4,6 +4,7 @@
     android:layout_width="300dp"
     android:layout_alignParentLeft="true"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
     android:layout_marginLeft="10dp">
 
     <TextView
@@ -11,10 +12,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/msg_show"
         android:layout_alignParentStart="true"
+        android:background="@drawable/left_background"
         android:textSize="18sp"
-        android:textColor="#fff"
-        android:padding="2dp"
-        android:background="@drawable/left_background"/>
+        android:textColor="#ff000000"
+        android:padding="5dp" />
 
     <TextView
         android:id="@+id/textViewDate"
@@ -22,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/msg_show"
         android:layout_alignParentLeft="true"
+        android:background="@drawable/left_background"
         android:text="date"
         android:textColor="@android:color/black"
         android:textSize="10sp" />

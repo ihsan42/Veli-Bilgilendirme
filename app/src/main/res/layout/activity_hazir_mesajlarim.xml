@@ -7,12 +7,24 @@
     tools:context=".HazirMesajlarim">
 
     <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textSize="18dp"
+        android:textColor="@color/colorTitleText"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center"
+        android:text="Hazır Mesajlarım" />
+
+    <TextView
         android:id="@+id/textView8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:layout_below="@id/textView"
         android:text='"Okul adı" öğrencilerinden "Öğrenci adı-soyadı"...'
         android:textColor="@color/colorRed"
+        android:background="@color/colorMyLightGreen"
         android:textSize="20dp"
         android:textStyle="bold" />
 
@@ -31,8 +43,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextHazirMesajim"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="10dp"
+        android:layout_margin="5dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorTitleText"
         android:text="Mesajı Kaydet" />
 
     <ListView
@@ -40,16 +53,33 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/textView13"
-        android:layout_alignParentStart="true" />
+android:layout_marginBottom="@dimen/toolbar_size"        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/textView13"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:textSize="18dp"
         android:layout_below="@+id/buttonMesajiKaydet"
-        android:background="@color/colorMyDarkGreen"
-        android:gravity="center"
         android:text="Kayıtlı Hazır Mesajlarım"
         android:textColor="@android:color/black"
         android:textStyle="bold" />
+
+    <fragment
+        android:id="@+id/fragmentMenu"
+        android:name="com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.MenuContentFragment"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/toolbar_size"/>
+
+    <include
+        layout="@layout/menu_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_size"
+        android:layout_alignParentBottom="true" />
+
 </RelativeLayout>

@@ -49,6 +49,10 @@
             android:id="@+id/buttonIptalAutoSMS2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorTitleText"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:text="İptal" />
 
@@ -56,6 +60,10 @@
             android:id="@+id/buttonGonderAutoSMS2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorTitleText"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:text="Gönder" />
     </LinearLayout>
@@ -93,10 +101,10 @@
     </RadioGroup>
 
     <TextView
-        android:id="@+id/textView10"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@color/colorMyDarkGreen"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorTitleText"
         android:gravity="center"
         android:text="Sms Gönderilsin mi?"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />

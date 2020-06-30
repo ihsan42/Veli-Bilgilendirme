@@ -56,7 +56,7 @@ public class AdaptorForChatPersonMessages extends RecyclerView.Adapter<AdaptorFo
 //        long senttime=chats.getSent_time()/1000;
         // Date sentdate=new Date(TimeUnit.SECONDS.toMillis(senttime));
         Date date= new Date(TimeUnit.SECONDS.toMillis(longtime));
-        SimpleDateFormat df2 = new SimpleDateFormat("kk:mm:ss\ndd.MM.yyyy");
+        SimpleDateFormat df2 = new SimpleDateFormat("kk:mm:ss   dd.MM.yyyy");
         String tarih=df2.format(date).toString();
         //String sentTarih=df2.format(sentdate).toString();
         viewHolder.show_date.setText(tarih);

@@ -45,8 +45,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class OgrenciListesi extends AppCompatActivity implements CommOgr {
+public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuContentComm  {
 
+    FragmentManager fm;
+    Button buttonMenuOpen;
+    Button buttonMenuClose;
+    MenuContentFragment menuContentFragment;
     public static final String SMS_SENT_ACTION = "com.andriodgifts.gift.SMS_SENT_ACTION";
     public static final String SMS_DELIVERED_ACTION = "com.andriodgifts.gift.SMS_DELIVERED_ACTION";
     TextView textViewTitle;
@@ -126,6 +130,27 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr {
 
         ActionBar bar=getSupportActionBar();
         bar.hide();
+
+        buttonMenuOpen=(Button)findViewById(R.id.buttonMenuOpen);
+        buttonMenuClose=(Button)findViewById(R.id.buttonMenuClose);
+
+        fm = getSupportFragmentManager();
+        menuContentFragment=(MenuContentFragment)fm.findFragmentById(R.id.fragmentMenu);
+        fm.beginTransaction().hide(menuContentFragment).commit();
+
+        buttonMenuOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuButtonsVisibility2();
+            }
+        });
+
+        buttonMenuClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuButtonsVisibility1();
+            }
+        });
 
         izinVarMi=checkPermission(getApplicationContext(),izinler);
         if(izinVarMi==false){
@@ -1491,5 +1516,22 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr {
         if(requestCode==requestCodePermission){
             izinVarMi=checkPermission(getApplicationContext(),izinler);
         }
+    }
+
+    private void menuButtonsVisibility2(){
+        fm.beginTransaction().show(menuContentFragment).commit();
+        buttonMenuOpen.setVisibility(View.INVISIBLE);
+        buttonMenuClose.setVisibility(View.VISIBLE);
+    }
+
+    private void menuButtonsVisibility1(){
+        fm.beginTransaction().hide(menuContentFragment).commit();
+        buttonMenuOpen.setVisibility(View.VISIBLE);
+        buttonMenuClose.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void menuButtonsVisibility() {
+        menuButtonsVisibility1();
     }
 }

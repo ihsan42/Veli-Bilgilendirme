@@ -17,59 +17,79 @@
         android:id="@+id/listViewKayitliOgr"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="150dp" />
+        android:layout_below="@id/toolbarKayOgr"
+        android:layout_above="@id/editTextKayitliOgrArama">
+
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/toolbarKayOgr"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/textView3"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="horizontal"></LinearLayout>
 
     <Button
         android:id="@+id/buttonKaytOgrOk"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="55dp"
-        android:background="@drawable/ic_check_circle_black_24dp" />
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/textView3"
+        android:layout_toLeftOf="@id/buttonKaytOgrCancel"
+        android:background="@drawable/ic_check_circle_white24dp" />
 
     <Button
         android:id="@+id/buttonKaytOgrCancel"
         android:layout_width="45dp"
         android:layout_height="45dp"
+        android:layout_marginRight="10dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="150dp"
-        android:layout_marginTop="55dp"
-        android:background="@drawable/ic_cancel_black_24dp" />
+        android:layout_below="@id/textView3"
+        android:background="@drawable/ic_cancel_white_24dp" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/colorMyDarkGreen"
+        android:layout_height="35dp"
+        android:background="@color/colorPrimaryDark"
         android:gravity="center_horizontal"
         android:text="Kayıtlı Öğrenciler"
-        android:textColor="@android:color/black"
-        android:textSize="30dp"
+        android:textColor="@color/colorTitleText"
+        android:textSize="20dp"
         android:textStyle="italic" />
 
-    <LinearLayout
+    <Spinner
+        android:id="@+id/spinnerKayitliOgr"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="100dp"
-        android:orientation="horizontal">
+        android:layout_height="40dp"
+        android:layout_toLeftOf="@id/buttonKaytOgrOk"
+        android:layout_below="@id/textView3" />
 
-        <Spinner
-            android:id="@+id/spinnerKayitliOgr"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+    <fragment
+        android:id="@+id/fragmentMenu"
+        android:name="com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.MenuContentFragment"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_above="@id/editTextKayitliOgrArama"/>
 
-        <EditText
-            android:id="@+id/editTextKayitliOgrArama"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="Arama yap..."
-            android:inputType="textPersonName" />
-    </LinearLayout>
+    <include
+        layout="@layout/menu_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_size"
+        android:layout_alignParentBottom="true" />
+
+    <EditText
+        android:id="@+id/editTextKayitliOgrArama"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_size"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="66dp"
+        android:ems="10"
+        android:hint="Arama yap..."
+        android:textColorHint="@color/colorTitleText"
+        android:textColor="@color/colorTitleText"
+        android:inputType="textPersonName" />
 
 </RelativeLayout>

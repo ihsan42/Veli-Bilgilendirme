@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -20,15 +23,19 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KisiselBilgiler extends AppCompatActivity {
+public class KisiselBilgiler extends AppCompatActivity implements MenuContentComm {
 
+    FragmentManager fm;
+    Button buttonMenuOpen;
+    Button buttonMenuClose;
+    MenuContentFragment menuContentFragment;
     ListView listView;
     List<String> dersler;
     EditText editTextDersler;
     EditText editTextAdSoyad;
     EditText editTextBrans;
     EditText editTextOkulAdi;
-    ArrayAdapter<String> adapter;
+    AdapterForOkutulanDersler adapter;
     String adSoyadYeni="";
     String bransYeni="";
     String okulAdiYeni="";
@@ -40,6 +47,27 @@ public class KisiselBilgiler extends AppCompatActivity {
 
         ActionBar bar=getSupportActionBar();
         bar.hide();
+
+        buttonMenuOpen=(Button)findViewById(R.id.buttonMenuOpen);
+        buttonMenuClose=(Button)findViewById(R.id.buttonMenuClose);
+
+        fm = getSupportFragmentManager();
+        menuContentFragment=(MenuContentFragment)fm.findFragmentById(R.id.fragmentMenu);
+        fm.beginTransaction().hide(menuContentFragment).commit();
+
+        buttonMenuOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuButtonsVisibilitySecond();
+            }
+        });
+
+        buttonMenuClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuButtonsVisibilityFirst();
+            }
+        });
 
         listView=(ListView)findViewById(R.id.listViewDersler);
         editTextDersler=(EditText)findViewById(R.id.editTextDersler);
@@ -59,7 +87,7 @@ public class KisiselBilgiler extends AppCompatActivity {
             editTextOkulAdi.setText(bilgiler.get(2));
         }
         if(dersler.size()>0){
-            adapter=new ArrayAdapter<>(getApplication(),android.R.layout.simple_list_item_1,dersler);
+            adapter=new AdapterForOkutulanDersler(getApplicationContext(),dersler);
             listView.setAdapter(adapter);
         }else{
             listView.setAdapter(null);
@@ -80,7 +108,7 @@ public class KisiselBilgiler extends AppCompatActivity {
                         vt.close();
                         dersler.remove(dersler.get(position));
                         if(dersler.size()>0){
-                            adapter=new ArrayAdapter<>(getApplication(),android.R.layout.simple_list_item_1,dersler);
+                            adapter=new AdapterForOkutulanDersler(getApplicationContext(),dersler);
                             listView.setAdapter(adapter);
                         }else{
                             listView.setAdapter(null);
@@ -140,7 +168,7 @@ public class KisiselBilgiler extends AppCompatActivity {
                             editTextDersler.setText("");
                             hideKeyboard(KisiselBilgiler.this);
                             if(dersler.size()>0){
-                                adapter=new ArrayAdapter<>(getApplication(),android.R.layout.simple_list_item_1,dersler);
+                                adapter=new AdapterForOkutulanDersler(getApplicationContext(),dersler);
                                 listView.setAdapter(adapter);
                             }else{
                                 listView.setAdapter(null);
@@ -164,5 +192,46 @@ public class KisiselBilgiler extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
+    }
+
+    private void menuButtonsVisibilitySecond(){
+        fm.beginTransaction().show(menuContentFragment).commit();
+        buttonMenuOpen.setVisibility(View.INVISIBLE);
+        buttonMenuClose.setVisibility(View.VISIBLE);
+    }
+
+    private void menuButtonsVisibilityFirst(){
+        fm.beginTransaction().hide(menuContentFragment).commit();
+        buttonMenuOpen.setVisibility(View.VISIBLE);
+        buttonMenuClose.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void menuButtonsVisibility() {
+        menuButtonsVisibilityFirst();
+    }
+
+    @Override
+    public void onBackPressed() {
+        androidx.appcompat.app.AlertDialog.Builder builder=new androidx.appcompat.app.AlertDialog.Builder(KisiselBilgiler.this);
+        builder.setTitle("Uygulamadan çıkılsın mı?");
+        builder.setPositiveButton("Çıkış", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent a = new Intent(Intent.ACTION_MAIN);
+                a.addCategory(Intent.CATEGORY_HOME);
+                a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(a);
+                finishAffinity();
+            }
+        });
+        builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        androidx.appcompat.app.AlertDialog alertDialog=builder.create();
+        alertDialog.show();
     }
 }

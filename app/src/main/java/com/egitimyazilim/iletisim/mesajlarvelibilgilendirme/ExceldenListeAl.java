@@ -16,6 +16,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,16 +37,20 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 
-public class ExceldenListeAl extends AppCompatActivity {
+public class ExceldenListeAl extends AppCompatActivity implements MenuContentComm {
 
-    private static final int requestCodePermissionRead=1990;
+    private static final int requestCodePermissionRead = 1990;
     private static final int FILE_SELECT_CODE = 55;
-    String filePath="";
-    String sinifadi="";
+    FragmentManager fm;
+    Button buttonMenuOpen;
+    Button buttonMenuClose;
+    MenuContentFragment menuContentFragment;
+    String filePath = "";
+    String sinifadi = "";
     List<String> stringList;
-    List<Ogrenci> ogrenciList=new ArrayList<>();
+    List<Ogrenci> ogrenciList = new ArrayList<>();
     ListView listView;
-    int hatakodu1=0;
+    int hatakodu1 = 0;
     EditText editTextSinifAdi;
 
     @Override
@@ -52,12 +58,34 @@ public class ExceldenListeAl extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_excelden_liste_al);
 
-        ActionBar bar =getSupportActionBar();
-                bar.hide();
-                listView=(ListView)findViewById(R.id.listViewExceldenAl);
-                editTextSinifAdi=(EditText)findViewById(R.id.editTextExceldenSinifAdi);
+        ActionBar bar = getSupportActionBar();
+        bar.hide();
 
-        final String[] depolamaIzni=new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
+        buttonMenuOpen = (Button) findViewById(R.id.buttonMenuOpen);
+        buttonMenuClose = (Button) findViewById(R.id.buttonMenuClose);
+
+        fm = getSupportFragmentManager();
+        menuContentFragment = (MenuContentFragment) fm.findFragmentById(R.id.fragmentMenu);
+        fm.beginTransaction().hide(menuContentFragment).commit();
+
+        buttonMenuOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuButtonsVisibilitySecond();
+            }
+        });
+
+        buttonMenuClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuButtonsVisibilityFirst();
+            }
+        });
+
+        listView = (ListView) findViewById(R.id.listViewExceldenAl);
+        editTextSinifAdi = (EditText) findViewById(R.id.editTextExceldenSinifAdi);
+
+        final String[] depolamaIzni = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(ExceldenListeAl.this, depolamaIzni, requestCodePermissionRead);
         }
@@ -90,7 +118,7 @@ public class ExceldenListeAl extends AppCompatActivity {
             }
         }
 
-        Button buttonSec=(Button)findViewById(R.id.buttonExceldenSec);
+        Button buttonSec = (Button) findViewById(R.id.buttonExceldenSec);
         buttonSec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,18 +156,18 @@ public class ExceldenListeAl extends AppCompatActivity {
             }
         });
 
-        Button buttonKaydet=(Button)findViewById(R.id.buttonExceldenKaydet);
+        Button buttonKaydet = (Button) findViewById(R.id.buttonExceldenKaydet);
         buttonKaydet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sinifadi=editTextSinifAdi.getText().toString().trim();
-                if(ogrenciList.size()>0){
-                    if(editTextSinifAdi.getText().toString().trim().equals("")){
-                        Toast.makeText(getApplicationContext(),"Lütfen sınıf adını giriniz!",Toast.LENGTH_SHORT).show();
-                    }else if(sinifadi.contains("'") || sinifadi.contains("=")|| sinifadi.contains("?")|| sinifadi.contains("+")|| sinifadi.contains(",")|| sinifadi.contains("!")){
-                        Toast.makeText(getApplicationContext(),"Lütfen sınıf adında özel karakterler(?,!'+!) kullanmayınız!",Toast.LENGTH_SHORT).show();
-                    }else{
-                        AlertDialog.Builder builder=new AlertDialog.Builder(ExceldenListeAl.this);
+                sinifadi = editTextSinifAdi.getText().toString().trim();
+                if (ogrenciList.size() > 0) {
+                    if (editTextSinifAdi.getText().toString().trim().equals("")) {
+                        Toast.makeText(getApplicationContext(), "Lütfen sınıf adını giriniz!", Toast.LENGTH_SHORT).show();
+                    } else if (sinifadi.contains("'") || sinifadi.contains("=") || sinifadi.contains("?") || sinifadi.contains("+") || sinifadi.contains(",") || sinifadi.contains("!")) {
+                        Toast.makeText(getApplicationContext(), "Lütfen sınıf adında özel karakterler(?,!'+!) kullanmayınız!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ExceldenListeAl.this);
                         builder.setMessage("Lüften sınıf türünü seçiniz");
                         builder.setCancelable(false);
                         builder.setNeutralButton("İptal", new DialogInterface.OnClickListener() {
@@ -151,7 +179,7 @@ public class ExceldenListeAl extends AppCompatActivity {
                         builder.setPositiveButton("Normal", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                sinifadi=editTextSinifAdi.getText().toString().trim();
+                                sinifadi = editTextSinifAdi.getText().toString().trim();
                                 for (Ogrenci ogrenci : ogrenciList) {
                                     ogrenci.setSinif(sinifadi);
                                 }
@@ -187,86 +215,87 @@ public class ExceldenListeAl extends AppCompatActivity {
                         builder.setNegativeButton("Kurs", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                sinifadi=editTextSinifAdi.getText().toString();
-                                sinifadi=sinifadi+("(Kurs)");
-                                for(Ogrenci ogrenci:ogrenciList){
+                                sinifadi = editTextSinifAdi.getText().toString();
+                                sinifadi = sinifadi + ("(Kurs)");
+                                for (Ogrenci ogrenci : ogrenciList) {
                                     ogrenci.setSinif(sinifadi);
                                 }
-                                Veritabani vt=new Veritabani(getApplicationContext());
-                                List<String> vtList=vt.getirKursSinif();
+                                Veritabani vt = new Veritabani(getApplicationContext());
+                                List<String> vtList = vt.getirKursSinif();
 
-                                boolean durum=false;
-                                for(String s:vtList){
-                                    if(s.equals(sinifadi.trim())){
-                                        durum=true;
+                                boolean durum = false;
+                                for (String s : vtList) {
+                                    if (s.equals(sinifadi.trim())) {
+                                        durum = true;
                                     }
                                 }
 
-                                if(durum==false){
-                                    long id= vt.ekleKursSinif(sinifadi);
-                                    if(id>0){
-                                        Toast.makeText(getApplicationContext(),sinifadi+" kaydedildi",Toast.LENGTH_SHORT).show();
-                                    }else {
-                                        Toast.makeText(getApplicationContext(),sinifadi+" kaydedilirken hata oluştu",Toast.LENGTH_SHORT).show();
+                                if (durum == false) {
+                                    long id = vt.ekleKursSinif(sinifadi);
+                                    if (id > 0) {
+                                        Toast.makeText(getApplicationContext(), sinifadi + " kaydedildi", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), sinifadi + " kaydedilirken hata oluştu", Toast.LENGTH_SHORT).show();
                                     }
-                                    for(Ogrenci ogrenci:ogrenciList){
-                                        long id2= vt.ekleOgrenci(ogrenci);
-                                        if(id2>0){
-                                        }else{
-                                            Toast.makeText(getApplicationContext(),ogrenci.getAdSoyad()+" kaydedilirken hata oluştu",Toast.LENGTH_SHORT).show();
+                                    for (Ogrenci ogrenci : ogrenciList) {
+                                        long id2 = vt.ekleOgrenci(ogrenci);
+                                        if (id2 > 0) {
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), ogrenci.getAdSoyad() + " kaydedilirken hata oluştu", Toast.LENGTH_SHORT).show();
                                         }
                                     }
-                                }else{
-                                    Toast.makeText(getApplicationContext(),sinifadi+" zaten kayıtlı",Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), sinifadi + " zaten kayıtlı", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
-                        AlertDialog alertDialog=builder.create();
+                        AlertDialog alertDialog = builder.create();
                         alertDialog.show();
                     }
-                }else{
-                    Toast.makeText(getApplicationContext()," Kaydedilecek liste yok!",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), " Kaydedilecek liste yok!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
     private void showFileChooser() {
-        final Dialog dialog=new Dialog(ExceldenListeAl.this);
+        final Dialog dialog = new Dialog(ExceldenListeAl.this);
+        dialog.setCancelable(false);
         dialog.setContentView(R.layout.uyari);
-        Button buttonKapat=(Button)dialog.findViewById(R.id.buttonKapat);
-        final CheckBox checkBoxBirDahaGosterme=(CheckBox)dialog.findViewById(R.id.checkBoxBirDahaGösterme);
+        Button buttonKapat = (Button) dialog.findViewById(R.id.buttonKapat);
+        final CheckBox checkBoxBirDahaGosterme = (CheckBox) dialog.findViewById(R.id.checkBoxBirDahaGösterme);
 
         buttonKapat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),FileChooserActivity.class);
-                intent.putExtra("excel",1);
-                startActivityForResult(intent,FILE_SELECT_CODE);
+                Intent intent = new Intent(getApplicationContext(), FileChooserActivity.class);
+                intent.putExtra("excel", 1);
+                startActivityForResult(intent, FILE_SELECT_CODE);
                 dialog.dismiss();
             }
         });
 
-        SharedPreferences sharedPref=getSharedPreferences("Bir daha gösteme",MODE_PRIVATE);
-        boolean durumBirdaha=sharedPref.getBoolean("durum",false);
-        if(durumBirdaha==false){
+        SharedPreferences sharedPref = getSharedPreferences("Bir daha gösteme", MODE_PRIVATE);
+        boolean durumBirdaha = sharedPref.getBoolean("durum", false);
+        if (durumBirdaha == false) {
             dialog.show();
-        }else{
-            Intent intent=new Intent(getApplicationContext(),FileChooserActivity.class);
-            intent.putExtra("excel",1);
-            startActivityForResult(intent,FILE_SELECT_CODE);
+        } else {
+            Intent intent = new Intent(getApplicationContext(), FileChooserActivity.class);
+            intent.putExtra("excel", 1);
+            startActivityForResult(intent, FILE_SELECT_CODE);
         }
 
         checkBoxBirDahaGosterme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences sharedPref=getSharedPreferences("Bir daha gösteme",MODE_PRIVATE);
-                SharedPreferences.Editor editor=sharedPref.edit();
-                if(isChecked){
-                    editor.putBoolean("durum",true);
+                SharedPreferences sharedPref = getSharedPreferences("Bir daha gösteme", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                if (isChecked) {
+                    editor.putBoolean("durum", true);
                     editor.commit();
-                }else{
-                    editor.putBoolean("durum",false);
+                } else {
+                    editor.putBoolean("durum", false);
                     editor.commit();
                 }
             }
@@ -278,11 +307,11 @@ public class ExceldenListeAl extends AppCompatActivity {
         switch (requestCode) {
             case FILE_SELECT_CODE:
                 if (resultCode == FILE_SELECT_CODE) {
-                    try{
-                        filePath=data.getStringExtra("path");
+                    try {
+                        filePath = data.getStringExtra("path");
                         new ExceldenListeAl.Listele().execute();
-                    }catch (Error e){
-                        Toast.makeText(getApplicationContext(),"Hata!Lütfen tekrar deneyiniz",Toast.LENGTH_SHORT).show();
+                    } catch (Error e) {
+                        Toast.makeText(getApplicationContext(), "Hata!Lütfen tekrar deneyiniz", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
@@ -293,16 +322,17 @@ public class ExceldenListeAl extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent ıntent=new Intent(getApplicationContext(),Siniflar.class);
+        Intent ıntent = new Intent(getApplicationContext(), Siniflar.class);
         startActivity(ıntent);
     }
 
-    private class Listele extends AsyncTask<Void,Void,Void> {
+    private class Listele extends AsyncTask<Void, Void, Void> {
         ProgressDialog progressDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog=new ProgressDialog(ExceldenListeAl.this);
+            progressDialog = new ProgressDialog(ExceldenListeAl.this);
             progressDialog.setCancelable(false);
             progressDialog.setTitle("Liste Getiriliyor...");
             progressDialog.show();
@@ -312,16 +342,16 @@ public class ExceldenListeAl extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             progressDialog.dismiss();
-            if(hatakodu1==10){
-                Toast.makeText(getApplicationContext(),"Hata! Excel dosyasının .XLS formatında kaydedildiğinden emin olun.Dosyada değişiklik yaptıysanız <Excel 97-2003 Çalışma Kitabı> formatında kaydettiğinizden emin olun!",Toast.LENGTH_LONG).show();
-            }else{
-                AdapterForPdfdenAl adapter=new AdapterForPdfdenAl(getApplicationContext(),stringList);
-                if(stringList.size()>0){
+            if (hatakodu1 == 10) {
+                Toast.makeText(getApplicationContext(), "Hata! Excel dosyasının .XLS formatında kaydedildiğinden emin olun.Dosyada değişiklik yaptıysanız <Excel 97-2003 Çalışma Kitabı> formatında kaydettiğinizden emin olun!", Toast.LENGTH_LONG).show();
+            } else {
+                AdapterForPdfdenAl adapter = new AdapterForPdfdenAl(getApplicationContext(), stringList);
+                if (stringList.size() > 0) {
                     listView.setAdapter(adapter);
-                    Toast.makeText(getApplicationContext(),"Listelendi",Toast.LENGTH_SHORT).show();
-                }else{
+                    Toast.makeText(getApplicationContext(), "Listelendi", Toast.LENGTH_SHORT).show();
+                } else {
                     listView.setAdapter(null);
-                    Toast.makeText(getApplicationContext(),"Listelenecek öğrenci yok!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Listelenecek öğrenci yok!", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -329,10 +359,10 @@ public class ExceldenListeAl extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            hatakodu1=0;
-            ogrenciList=new ArrayList<>();
-            stringList=new ArrayList<>();
-            File file=new File(filePath);
+            hatakodu1 = 0;
+            ogrenciList = new ArrayList<>();
+            stringList = new ArrayList<>();
+            File file = new File(filePath);
             try {
                 WorkbookSettings vs = new WorkbookSettings();
                 vs.setEncoding("CP1254");
@@ -343,37 +373,37 @@ public class ExceldenListeAl extends AppCompatActivity {
 
                 for (int i = 1; i < excelSayfasi.getColumn(1).length; i++) {
                     if (!excelSayfasi.getCell(0, i).getContents().toString().equals("Kız Öğrenci Sayısı        :")) {
-                        Ogrenci ogrenci=new Ogrenci();
+                        Ogrenci ogrenci = new Ogrenci();
 
                         Cell ogrNo = excelSayfasi.getCell(1, i);
                         ogrenci.setOkulno(ogrNo.getContents().trim());
 
-                        Cell ad=excelSayfasi.getCell(3,i);
-                        Cell soyad=excelSayfasi.getCell(8,i);
-                        String isim=ad.getContents().trim();
-                        String soyIsim=soyad.getContents().trim();
-                        if(isim.equals("")&&soyIsim.equals("")) {
+                        Cell ad = excelSayfasi.getCell(3, i);
+                        Cell soyad = excelSayfasi.getCell(8, i);
+                        String isim = ad.getContents().trim();
+                        String soyIsim = soyad.getContents().trim();
+                        if (isim.equals("") && soyIsim.equals("")) {
                             Cell ad2 = excelSayfasi.getCell(4, i);
                             Cell soyad2 = excelSayfasi.getCell(9, i);
                             isim = ad2.getContents().trim();
                             soyIsim = soyad2.getContents().trim();
                         }
-                        ogrenci.setAdSoyad(isim+" "+soyIsim);
+                        ogrenci.setAdSoyad(isim + " " + soyIsim);
 
-                        if(excelSayfasi.getColumns()>15){
+                        if (excelSayfasi.getColumns() > 15) {
                             Cell telNo = excelSayfasi.getCell(15, i);
                             ogrenci.setTelno(telNo.getContents().trim());
-                            if(telNo.getContents().trim().equals("")){
+                            if (telNo.getContents().trim().equals("")) {
                                 ogrenci.setTelno("0");
                             }
-                        }else{
+                        } else {
                             ogrenci.setTelno("0");
                         }
 
-                        if(excelSayfasi.getColumns()>17){
+                        if (excelSayfasi.getColumns() > 17) {
                             Cell veliAdi = excelSayfasi.getCell(17, i);
                             ogrenci.setVeliAdi(veliAdi.getContents().trim());
-                        }else{
+                        } else {
                             ogrenci.setVeliAdi("");
                         }
 
@@ -383,17 +413,34 @@ public class ExceldenListeAl extends AppCompatActivity {
                         ogrenci.setSinif("");
 
                         ogrenciList.add(ogrenci);
-                        stringList.add(ogrenci.getOkulno()+" "+isim+ " "+soyIsim+"\n        Veli:"+ogrenci.getVeliAdi()+"   Tel:"+ogrenci.getTelno());
+                        stringList.add(ogrenci.getOkulno() + " " + isim + " " + soyIsim + "\n        Veli:" + ogrenci.getVeliAdi() + "   Tel:" + ogrenci.getTelno());
                     }
                 }
-                for(int i=1;i<stringList.size()+1;i++){
-                    stringList.set(i-1,i+")  "+stringList.get(i-1));
+                for (int i = 1; i < stringList.size() + 1; i++) {
+                    stringList.set(i - 1, i + ")  " + stringList.get(i - 1));
                 }
-            }catch (Exception e){
-                hatakodu1=10;
-                Log.e("hata",e.toString());
+            } catch (Exception e) {
+                hatakodu1 = 10;
+                Log.e("hata", e.toString());
             }
             return null;
         }
+    }
+
+    private void menuButtonsVisibilitySecond() {
+        fm.beginTransaction().show(menuContentFragment).commit();
+        buttonMenuOpen.setVisibility(View.INVISIBLE);
+        buttonMenuClose.setVisibility(View.VISIBLE);
+    }
+
+    private void menuButtonsVisibilityFirst() {
+        fm.beginTransaction().hide(menuContentFragment).commit();
+        buttonMenuOpen.setVisibility(View.VISIBLE);
+        buttonMenuClose.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void menuButtonsVisibility() {
+        menuButtonsVisibilityFirst();
     }
 }

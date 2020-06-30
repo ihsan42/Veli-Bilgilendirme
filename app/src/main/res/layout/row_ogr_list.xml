@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rowOgrList"
     android:layout_width="match_parent"
     android:layout_height="85dp">
 
@@ -98,7 +97,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="20"
-                    android:button="@drawable/checbox_selector"
+                    android:button="@drawable/checbox_selector_black"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:text="İzin"
@@ -111,7 +110,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="20"
-                    android:button="@drawable/checbox_selector"
+                    android:button="@drawable/checbox_selector_black"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:text="Rapor"
@@ -131,7 +130,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="40"
-                    android:button="@drawable/checbox_selector"
+                    android:button="@drawable/checbox_selector_black"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:text="Geç"
@@ -143,7 +142,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="40"
-                    android:button="@drawable/checbox_selector"
+                    android:button="@drawable/checbox_selector_black"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:text="Yok"

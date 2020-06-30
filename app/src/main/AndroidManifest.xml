@@ -86,18 +86,16 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Siniflar"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Siniflar"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme" />
+
         <activity
             android:name=".OgrenciListesi"
             android:configChanges="orientation|screenSize"

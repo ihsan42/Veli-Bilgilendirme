@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rowKayitliOgr"
     android:layout_width="match_parent"
     android:layout_height="85dp">
 
@@ -100,7 +99,7 @@
 
             <CheckBox
                 android:id="@+id/checkBoxKayitOgr"
-                android:button="@drawable/checbox_selector"
+                android:button="@drawable/checbox_selector_black"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>

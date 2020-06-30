@@ -8,11 +8,11 @@
     <TextView
         android:id="@+id/textViewGecmisYokTitle"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/colorMyDarkGreen"
+        android:layout_height="40dp"
+        android:background="@color/colorPrimaryDark"
         android:gravity="center"
         android:text="Gün Seçiniz"
-        android:textColor="@android:color/black"
+        android:textColor="@color/colorTitleText"
         android:textSize="25dp" />
 
     <CalendarView
@@ -52,7 +52,6 @@
         android:layout_below="@+id/calendarView">
 
         <RadioGroup
-            android:id="@+id/radioGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
