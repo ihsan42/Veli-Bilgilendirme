@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.MesajKutusuPageAdapter;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.MenuContentFragment;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.MenuContentComm;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.appcompat.app.AlertDialog;
@@ -13,7 +16,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-public class MesajKutusu extends AppCompatActivity implements MenuContentComm{
+public class MesajKutusu extends AppCompatActivity implements MenuContentComm {
 
     FragmentManager fm;
     Button buttonMenuOpen;

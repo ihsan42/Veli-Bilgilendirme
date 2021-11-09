@@ -3,7 +3,7 @@ package com.egitimyazilim.iletisim.mesajlarvelibilgilendirme;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +21,11 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.AdapterForKayıtlıOgr;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.MenuContentFragment;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.MenuContentComm;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
 
 import java.util.ArrayList;
 import java.util.List;

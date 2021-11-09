@@ -69,7 +69,7 @@ android:layout_marginBottom="@dimen/toolbar_size"        android:layout_alignPar
 
     <fragment
         android:id="@+id/fragmentMenu"
-        android:name="com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.MenuContentFragment"
+        android:name="com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.MenuContentFragment"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

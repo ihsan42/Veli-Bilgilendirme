@@ -7,6 +7,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
+
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.TabPageAdapter;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.MenuContentFragment;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.SinifEkleme;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.SinifGuncelleme;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.CommSinif;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.MenuContentComm;
 import com.google.android.material.tabs.TabLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
@@ -20,7 +27,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class Siniflar extends AppCompatActivity implements CommSinif , MenuContentComm {
+public class Siniflar extends AppCompatActivity implements CommSinif, MenuContentComm {
 
     ViewPager viewPager;
     TabPageAdapter tabPageAdapter;
@@ -66,6 +73,11 @@ public class Siniflar extends AppCompatActivity implements CommSinif , MenuConte
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+
+        final String[] depolamaIzni = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE,Manifest.permission.READ_CONTACTS,Manifest.permission.WRITE_CONTACTS,Manifest.permission.CALL_PHONE,Manifest.permission.READ_SMS,Manifest.permission.SEND_SMS,};
+
+            ActivityCompat.requestPermissions(Siniflar.this, depolamaIzni, 102);
+        
 
         Button buttonAdd = (Button) findViewById(R.id.buttonSiniflarAdd);
         buttonAdd.setOnClickListener(new View.OnClickListener() {

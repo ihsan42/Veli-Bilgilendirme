@@ -14,13 +14,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.AdapterForYoklama;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.GecmisYoklamaGirme;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.MenuContentFragment;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.YoklamaGecmisi;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.CommYoklama;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.MenuContentComm;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.OgrenciForYoklama;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class YoklamaKayitlari extends AppCompatActivity implements CommYoklama, MenuContentComm{
+public class YoklamaKayitlari extends AppCompatActivity implements CommYoklama, MenuContentComm {
 
     FragmentManager fm;
     Button buttonMenuOpen;

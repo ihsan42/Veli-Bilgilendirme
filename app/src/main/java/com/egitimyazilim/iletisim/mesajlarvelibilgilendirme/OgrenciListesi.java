@@ -38,14 +38,25 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.AdapterForKayıtlıOgr;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.AdapterForOgrList;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.AdapterForOgrListOneCheck;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.AdapterTumOgr;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.contentprovider.MessagesContentProviderHandler;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.MenuContentFragment;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.MultiSpecialSms;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.OgrenciEkleme;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.OgrenciGuncelle;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.CommOgr;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.MenuContentComm;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuContentComm  {
+public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuContentComm {
 
     FragmentManager fm;
     Button buttonMenuOpen;
@@ -1409,7 +1420,7 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
     @Override
     public void openOgrenciEkleme(String sinifadi) {
         FragmentManager manager=getSupportFragmentManager();
-        OgrenciEkleme  ogrenciEkleme=new OgrenciEkleme();
+        OgrenciEkleme ogrenciEkleme=new OgrenciEkleme();
         //ogrenciEkleme.setCancelable(false);
         ogrenciEkleme.show(manager,"Öğrenci Ekleme");
         ogrenciEkleme.gelenSinif(sinifadi);

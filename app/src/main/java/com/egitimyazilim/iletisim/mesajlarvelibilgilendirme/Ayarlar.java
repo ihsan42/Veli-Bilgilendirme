@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.ActionBar;
@@ -26,6 +26,11 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
+
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.MenuContentFragment;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.MenuContentComm;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.OgrenciForYazili;
 
 import java.io.File;
 import java.io.IOException;
@@ -180,7 +185,7 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
                                 Toast.makeText(getApplicationContext(), "Excel dosyası <Download> klasörüne <Veli_Bilgilendirme_Sınıf_Ekleme_Taslağı.xls> adıyla kaydedildi ", Toast.LENGTH_LONG).show();
 
                             } catch (Exception e) {
-                                Toast.makeText(getApplicationContext(), "Hata!", Toast.LENGTH_LONG).show();
+                                Log.e("hata",e.getLocalizedMessage());
                             }
                         }
                     });

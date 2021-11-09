@@ -12,7 +12,7 @@ import android.provider.ContactsContract;
 import androidx.core.app.ActivityCompat;
 import android.telephony.SmsMessage;
 
-import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.Ogrenci;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.Veritabani;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.contentprovider.MessagesContentProviderHandler;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.utils.NotificationUtil;

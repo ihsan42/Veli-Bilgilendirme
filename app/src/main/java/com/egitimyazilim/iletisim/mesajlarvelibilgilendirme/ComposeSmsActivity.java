@@ -22,14 +22,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.telephony.SmsManager;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.AdaptorForChatPersonMessages;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.contentprovider.MessagesContentProviderHandler;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Chats;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.utils.ContentContract;
 
 import java.util.ArrayList;

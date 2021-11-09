@@ -103,7 +103,7 @@
 
     <fragment
         android:id="@+id/fragmentMenu"
-        android:name="com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.MenuContentFragment"
+        android:name="com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.MenuContentFragment"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

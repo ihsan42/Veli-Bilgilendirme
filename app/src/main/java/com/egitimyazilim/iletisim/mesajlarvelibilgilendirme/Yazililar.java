@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.provider.Telephony;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.ActionBar;
@@ -30,11 +29,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-import static androidx.core.content.ContextCompat.checkSelfPermission;
 
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.AdapterForYazili;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.contentprovider.MessagesContentProviderHandler;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.MenuContentFragment;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.MenuContentComm;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.OgrenciForYazili;
 
 import java.util.ArrayList;
 import java.util.Calendar;

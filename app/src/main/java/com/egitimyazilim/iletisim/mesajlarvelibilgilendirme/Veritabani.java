@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.security.Principal;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.OgrenciForYazili;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -316,7 +318,7 @@ public class Veritabani extends SQLiteOpenHelper {
         db.close();
     }
 
-    public long yoklamaKaydet(Ogrenci ogrenci,String durum, String tarih){
+    public long yoklamaKaydet(Ogrenci ogrenci, String durum, String tarih){
         SQLiteDatabase db= this.getWritableDatabase();
         ContentValues cv= new ContentValues();
         cv.put("sinifadi",ogrenci.getSinif());
