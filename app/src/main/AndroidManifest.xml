@@ -26,14 +26,17 @@
 
         <receiver
             android:name=".messagerecieve.SmsBroadcastReceiver"
-            android:permission="android.permission.BROADCAST_SMS">
+            android:permission="android.permission.BROADCAST_SMS"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_DELIVER" />
             </intent-filter>
         </receiver> <!-- BroadcastReceiver that listens for incoming MMS messages -->
         <receiver
             android:name=".messagerecieve.MMSBroadcastReceiver"
-            android:permission="android.permission.BROADCAST_WAP_PUSH">
+            android:permission="android.permission.BROADCAST_WAP_PUSH"
+            android:exported="true">
+            tools:ignore="IntentFilterExportedReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER" />
 
@@ -59,7 +62,8 @@
 
         <activity android:name=".ComposeSmsActivity"
             android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustUnspecified">
+            android:windowSoftInputMode="adjustUnspecified"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <action android:name="android.intent.action.SENDTO" />
@@ -76,19 +80,24 @@
         <activity
             android:name=".MesajKutusu"
             android:configChanges="orientation|screenSize"
+            android:exported="true">
             android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name=".ExceldenListeAl"
             android:configChanges="orientation|screenSize"
+            android:exported="true"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".FileChooserActivity"
             android:configChanges="orientation|screenSize"
+            android:exported="true"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".Siniflar"
             android:configChanges="orientation|screenSize"
+            android:exported="true"
+            tools:ignore="ExtraText">
             android:theme="@style/AppTheme">
 
             <intent-filter>
@@ -101,40 +110,48 @@
             android:name=".OgrenciListesi"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme"
+            android:exported="true"
             android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".YoklamaKayitlari"
             android:configChanges="orientation|screenSize"
+            android:exported="true"
             android:theme="@style/AppTheme" >
         </activity>
         <activity
             android:name=".KayitliOgrenciler"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme"
+            android:exported="true"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".Ayarlar"
             android:configChanges="orientation|screenSize"
+            android:exported="true"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".KisiselBilgiler"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
+            android:exported="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".HazirMesajlarim"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme"
+            android:exported="true"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".Yazililar"
+            android:exported="true"
             android:configChanges="orientation|screenSize" >
         </activity>
 
         <activity
             android:name=".YardimciVideolar"
+            android:exported="true"
             android:configChanges="orientation|screenSize" >
         </activity>
     </application>

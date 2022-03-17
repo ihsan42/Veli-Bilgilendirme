@@ -348,7 +348,10 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
             super.onPostExecute(aVoid);
             progressDialog.dismiss();
             if (hatakodu1 == 10) {
-                Toast.makeText(getApplicationContext(), "Hata! Excel dosyasının .XLS formatında kaydedildiğinden emin olun.Dosyada değişiklik yaptıysanız <Excel 97-2003 Çalışma Kitabı> formatında kaydettiğinizden emin olun!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Hata! Excel dosyasının .XLS formatında " +
+                        "kaydedildiğinden emin olun.Dosyada değişiklik " +
+                        "yaptıysanız <Excel 97-2003 Çalışma Kitabı> formatında " +
+                        "kaydettiğinizden emin olun!", Toast.LENGTH_LONG).show();
             } else {
                 AdapterForPdfdenAl adapter = new AdapterForPdfdenAl(getApplicationContext(), stringList);
                 if (stringList.size() > 0) {
