@@ -1,6 +1,8 @@
 package com.egitimyazilim.iletisim.mesajlarvelibilgilendirme;
 
+
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -32,23 +34,19 @@ import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.MenuConte
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.OgrenciForYazili;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.read.biff.BiffException;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
-import jxl.write.biff.RowsExceededException;
 
 public class Ayarlar extends AppCompatActivity implements MenuContentComm {
 
@@ -61,7 +59,7 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
     Button buttonMenuOpen;
     Button buttonMenuClose;
     MenuContentFragment menuContentFragment;
-    String filePath;
+    Uri fileUri;
     List<Ogrenci> ogrenciList;
     List<String> sinifList;
     List<String> dersList;
@@ -162,25 +160,31 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
                     builder.setPositiveButton("İndir", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/Veli_Bilgilendirme_Sınıf_Ekleme_Taslağı.xls";
-                            File file = new File(path);
                             try {
-                                WritableWorkbook ogrencilerExelDosyasi = Workbook.createWorkbook(file);
-                                WritableSheet ogrencilerSayfasi = ogrencilerExelDosyasi.createSheet("Sınıf_Listesi", 0);
+                                Workbook ogrencilerExelDosyasi = new SXSSFWorkbook();
+                                Sheet ogrencilerSayfasi = ogrencilerExelDosyasi.createSheet("Sınıf_Listesi");
+                                Row row=ogrencilerSayfasi.createRow(0);
 
-                                Label ders = new Label(1, 0, "ÖĞRENCİ NO");
-                                ogrencilerSayfasi.addCell(ders);
-                                Label ad = new Label(3, 0, "AD");
-                                ogrencilerSayfasi.addCell(ad);
-                                Label soyad = new Label(8, 0, "SOYAD");
-                                ogrencilerSayfasi.addCell(soyad);
-                                Label telNo = new Label(15, 0, "TELEFON NO");
-                                ogrencilerSayfasi.addCell(telNo);
-                                Label veliAdi = new Label(17, 0, "VELİ ADI");
-                                ogrencilerSayfasi.addCell(veliAdi);
+                                Cell ders=row.createCell(1);
+                                ders.setCellValue("ÖĞRENCİ NO");
 
-                                ogrencilerExelDosyasi.write();
-                                ogrencilerExelDosyasi.close();
+                                Cell ad=row.createCell(4);
+                                ad.setCellValue("AD");
+
+                                Cell soyad=row.createCell(9);
+                                soyad.setCellValue("SOYAD");
+
+                                Cell telNo=row.createCell(16);
+                                telNo.setCellValue("TELEFON NO");
+
+                                Cell veliAdi=row.createCell(18);
+                                veliAdi.setCellValue("VELİ ADI");
+
+                                String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/Veli_Bilgilendirme_Sınıf_Ekleme_Taslağı.xls";
+                                File file = new File(getExternalFilesDir(null),path);
+
+                                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                                ogrencilerExelDosyasi.write(fileOutputStream);
 
                                 Toast.makeText(getApplicationContext(), "Excel dosyası <Download> klasörüne <Veli_Bilgilendirme_Sınıf_Ekleme_Taslağı.xls> adıyla kaydedildi ", Toast.LENGTH_LONG).show();
 
@@ -400,7 +404,7 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
 
             String path= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/Veli_Bilgilendirme_yedek_"+tarihBugun+".xls";
             File file=new File(path);
-            try {
+          /*  try {
                 WritableWorkbook ogrencilerExelDosyasi= Workbook.createWorkbook(file);
                 WritableSheet ogrencilerSayfasi=ogrencilerExelDosyasi.createSheet("Ogrenciler",0);
                 WritableSheet siniflarSayfasi=ogrencilerExelDosyasi.createSheet("Siniflar",1);
@@ -519,7 +523,7 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
             } catch (WriteException e) {
                 e.printStackTrace();
             }
-            return null;
+        */    return null;
         }
     }
 
@@ -549,7 +553,7 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
         @Override
         protected Void doInBackground(Void... voids) {
             hatakodu = 0;
-            try {
+           /* try {
                 ogrenciList = new ArrayList<>();
                 sinifList = new ArrayList<>();
                 kursSinifList = new ArrayList<>();
@@ -809,8 +813,20 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
             } catch (Exception e) {
                 hatakodu = 21;
             }
-            return null;
+           */ return null;
         }
+    }
+
+    public void openDirectory() {
+        String[] mimetypes =
+                { "application/vnd.ms-excel", // .xls
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}; // .xlsx
+
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
+        startActivityForResult(intent, FILE_SELECT_CODE);
     }
 
     private void showFileChooser() {
@@ -821,9 +837,7 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 yaziliKaydiGetirme=false;
-                Intent intent=new Intent(getApplicationContext(),FileChooserActivity.class);
-                intent.putExtra("excel",1);
-                startActivityForResult(intent,FILE_SELECT_CODE);
+                openDirectory();
             }
         });
 
@@ -831,9 +845,7 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 yaziliKaydiGetirme=true;
-                Intent intent=new Intent(getApplicationContext(),FileChooserActivity.class);
-                intent.putExtra("excel",1);
-                startActivityForResult(intent,FILE_SELECT_CODE);
+                openDirectory();
             }
         });
         AlertDialog alertDialog=builder.create();
@@ -841,21 +853,20 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case FILE_SELECT_CODE:
-                if (resultCode == FILE_SELECT_CODE) {
-                    try{
-                        filePath=data.getStringExtra("path");
-                        Log.e("Dosya Yolu",filePath);
-                        new YedektenAl().execute();
-                    }catch (Error e){
-                        Toast.makeText(getApplicationContext(),"Hata!Lütfen tekrar deneyiniz",Toast.LENGTH_SHORT).show();
-                    }
-                }
-                break;
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+        super.onActivityResult(requestCode, resultCode, resultData);
+        if (requestCode == FILE_SELECT_CODE
+                && resultCode == Activity.RESULT_OK) {
+            // The result data contains a URI for the document or directory that
+            // the user selected.
+            Uri uri = null;
+            if (resultData != null) {
+                fileUri = resultData.getData();
+                Log.e("PATH",fileUri.getPath());
+                new YedektenAl().execute();
+            }
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void menuButtonsVisibilitySecond(){

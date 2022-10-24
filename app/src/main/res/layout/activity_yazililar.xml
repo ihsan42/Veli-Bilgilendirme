@@ -129,7 +129,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
-        android:layout_marginBottom="@dimen/toolbar_size"/>
+        android:layout_marginBottom="@dimen/toolbar_size" />
 
     <fragment
         android:id="@+id/fragmentMenu"

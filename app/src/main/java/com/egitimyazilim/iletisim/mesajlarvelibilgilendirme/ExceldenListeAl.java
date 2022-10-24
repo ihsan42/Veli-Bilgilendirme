@@ -1,6 +1,7 @@
 package com.egitimyazilim.iletisim.mesajlarvelibilgilendirme;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -10,15 +11,20 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.DocumentsContract;
 import android.provider.Settings;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
-import android.os.Bundle;
+import android.os.Bundle;;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,14 +39,21 @@ import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.MenuConten
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.MenuContentComm;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
 
-import java.io.File;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
 
 public class ExceldenListeAl extends AppCompatActivity implements MenuContentComm {
 
@@ -51,12 +64,14 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
     Button buttonMenuClose;
     MenuContentFragment menuContentFragment;
     String filePath = "";
+    Uri fileUri;
     String sinifadi = "";
     List<String> stringList;
     List<Ogrenci> ogrenciList = new ArrayList<>();
     ListView listView;
     int hatakodu1 = 0;
     EditText editTextSinifAdi;
+    ActivityResultLauncher<Intent> mStartForResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -264,7 +279,37 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
         });
     }
 
+    public void openDirectory() {
+        String[] mimetypes =
+                { "application/vnd.ms-excel", // .xls
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}; // .xlsx
+
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
+        startActivityForResult(intent, FILE_SELECT_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+        super.onActivityResult(requestCode, resultCode, resultData);
+        if (requestCode == FILE_SELECT_CODE
+                && resultCode == Activity.RESULT_OK) {
+            // The result data contains a URI for the document or directory that
+            // the user selected.
+            Uri uri = null;
+            if (resultData != null) {
+                fileUri = resultData.getData();
+                Log.e("PATH",fileUri.getPath());
+                new Listele().execute();
+            }
+        }
+    }
+
     private void showFileChooser() {
+
         final Dialog dialog = new Dialog(ExceldenListeAl.this);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.uyari);
@@ -274,9 +319,13 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
         buttonKapat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), FileChooserActivity.class);
+               /* Intent intent = new Intent(getApplicationContext(), FileChooserActivity.class);
                 intent.putExtra("excel", 1);
-                startActivityForResult(intent, FILE_SELECT_CODE);
+                startActivityForResult(intent, FILE_SELECT_CODE);*/
+
+
+                openDirectory();
+
                 dialog.dismiss();
             }
         });
@@ -286,9 +335,10 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
         if (durumBirdaha == false) {
             dialog.show();
         } else {
-            Intent intent = new Intent(getApplicationContext(), FileChooserActivity.class);
+            /*Intent intent = new Intent(getApplicationContext(), FileChooserActivity.class);
             intent.putExtra("excel", 1);
-            startActivityForResult(intent, FILE_SELECT_CODE);
+            startActivityForResult(intent, FILE_SELECT_CODE);*/
+            openDirectory();
         }
 
         checkBoxBirDahaGosterme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -305,23 +355,6 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
                 }
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case FILE_SELECT_CODE:
-                if (resultCode == FILE_SELECT_CODE) {
-                    try {
-                        filePath = data.getStringExtra("path");
-                        new ExceldenListeAl.Listele().execute();
-                    } catch (Error e) {
-                        Toast.makeText(getApplicationContext(), "Hata!Lütfen tekrar deneyiniz", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                break;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -348,10 +381,19 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
             super.onPostExecute(aVoid);
             progressDialog.dismiss();
             if (hatakodu1 == 10) {
-                Toast.makeText(getApplicationContext(), "Hata! Excel dosyasının .XLS formatında " +
-                        "kaydedildiğinden emin olun.Dosyada değişiklik " +
-                        "yaptıysanız <Excel 97-2003 Çalışma Kitabı> formatında " +
-                        "kaydettiğinizden emin olun!", Toast.LENGTH_LONG).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ExceldenListeAl.this);
+                builder.setTitle("HATA");
+                builder.setMessage("Excel dosyası .XLS formatında olmalıdır." +
+                        "Dosyada değişiklik yaptıysanız <Excel 97-2003 Çalışma Kitabı> " +
+                        "formatında kaydettiğinizden emin olun!");
+                builder.setPositiveButton("Kapat", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             } else {
                 AdapterForPdfdenAl adapter = new AdapterForPdfdenAl(getApplicationContext(), stringList);
                 if (stringList.size() > 0) {
@@ -367,69 +409,100 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
 
         @Override
         protected Void doInBackground(Void... voids) {
-            hatakodu1 = 0;
             ogrenciList = new ArrayList<>();
             stringList = new ArrayList<>();
-            File file = new File(filePath);
+
+            InputStream inputStream = null;
+            Workbook CalismaKitabi = null;
             try {
-                WorkbookSettings vs = new WorkbookSettings();
-                vs.setEncoding("CP1254");
-                Workbook CalismaKitabi = Workbook.getWorkbook(file, vs);
-                Sheet[] sayfalar = CalismaKitabi.getSheets();
+                inputStream = getContentResolver().openInputStream(fileUri);
+                CalismaKitabi = WorkbookFactory.create(inputStream);
+            } catch (InvalidFormatException | IOException e) {
+                e.printStackTrace();
+            }
+            Sheet sheet = CalismaKitabi.getSheetAt(0);
 
-                Sheet excelSayfasi = CalismaKitabi.getSheet(0);
-
-                for (int i = 1; i < excelSayfasi.getColumn(1).length; i++) {
-                    if (!excelSayfasi.getCell(0, i).getContents().toString().equals("Kız Öğrenci Sayısı        :")) {
-                        Ogrenci ogrenci = new Ogrenci();
-
-                        Cell ogrNo = excelSayfasi.getCell(1, i);
-                        ogrenci.setOkulno(ogrNo.getContents().trim());
-
-                        Cell ad = excelSayfasi.getCell(3, i);
-                        Cell soyad = excelSayfasi.getCell(8, i);
-                        String isim = ad.getContents().trim();
-                        String soyIsim = soyad.getContents().trim();
-                        if (isim.equals("") && soyIsim.equals("")) {
-                            Cell ad2 = excelSayfasi.getCell(4, i);
-                            Cell soyad2 = excelSayfasi.getCell(9, i);
-                            isim = ad2.getContents().trim();
-                            soyIsim = soyad2.getContents().trim();
-                        }
-                        ogrenci.setAdSoyad(isim + " " + soyIsim);
-
-                        if (excelSayfasi.getColumns() > 15) {
-                            Cell telNo = excelSayfasi.getCell(15, i);
-                            ogrenci.setTelno(telNo.getContents().trim());
-                            if (telNo.getContents().trim().equals("")) {
-                                ogrenci.setTelno("0");
+            String ilkKolon="Kız Öğrenci Sayısı        :";
+            Boolean eOkuldanMi=false;
+            for(int i=1;i<sheet.getLastRowNum();i++){
+                Cell cell = sheet.getRow(i).getCell(0);
+                if(cell!=null){
+                    switch (cell.getCellType()) {
+                        case Cell.CELL_TYPE_NUMERIC:
+                            if(String.valueOf(cell.getNumericCellValue()).equals(ilkKolon)){
+                                eOkuldanMi=true;
                             }
-                        } else {
+                            break;
+                        case Cell.CELL_TYPE_STRING:
+                            if(cell.getStringCellValue().equals(ilkKolon)){
+                                eOkuldanMi=true;
+                            }
+                            break;
+                    }
+                }
+            }
+            if(eOkuldanMi){
+                Row row=sheet.getRow(sheet.getLastRowNum());
+                sheet.removeRow(row);
+                row=sheet.getRow(sheet.getLastRowNum());
+                sheet.removeRow(row);
+            }
+            if (sheet.getLastRowNum() > 0) {
+                Log.e("LastRowNum",String.valueOf(sheet.getLastRowNum()));
+                for (int r = 1; r < sheet.getLastRowNum()+1; r++) {
+                    Ogrenci ogrenci = new Ogrenci();
+                    Row row = sheet.getRow(r);
+
+                    Cell ogrNo = row.getCell(1);
+                    switch (ogrNo.getCellType()) {
+                        case Cell.CELL_TYPE_NUMERIC:
+                            ogrenci.setOkulno(String.valueOf(Math.round(ogrNo.getNumericCellValue())));
+                            break;
+                        case Cell.CELL_TYPE_STRING:
+                            ogrenci.setOkulno(ogrNo.getStringCellValue().trim());
+                            break;
+                    }
+
+                    Cell ad = row.getCell(4);
+                    Cell soyad = row.getCell(9);
+                    String isim = ad.getStringCellValue().trim();
+                    String soyIsim = soyad.getStringCellValue().trim();
+                    ogrenci.setAdSoyad(isim + " " + soyIsim);
+
+                    if (row.getLastCellNum() > 14) {
+                        Cell telNo = row.getCell(16);
+                        String telno="";
+                        switch (telNo.getCellType()) {
+                            case Cell.CELL_TYPE_NUMERIC:
+                                telno=String.valueOf(Math.round(telNo.getNumericCellValue()));
+                                break;
+                            case Cell.CELL_TYPE_STRING:
+                                telno=telNo.getStringCellValue().trim();
+                                break;
+                        }
+                        ogrenci.setTelno(telno);
+
+                        if (telNo.equals("")) {
                             ogrenci.setTelno("0");
                         }
-
-                        if (excelSayfasi.getColumns() > 17) {
-                            Cell veliAdi = excelSayfasi.getCell(17, i);
-                            ogrenci.setVeliAdi(veliAdi.getContents().trim());
-                        } else {
-                            ogrenci.setVeliAdi("");
-                        }
-
-
-                        ogrenci.setDurumYok(false);
-                        ogrenci.setDurumGec(false);
-                        ogrenci.setSinif("");
-
-                        ogrenciList.add(ogrenci);
-                        stringList.add(ogrenci.getOkulno() + " " + isim + " " + soyIsim + "\n        Veli:" + ogrenci.getVeliAdi() + "   Tel:" + ogrenci.getTelno());
+                        Cell veliAdi = row.getCell(18);
+                        ogrenci.setVeliAdi(veliAdi.getStringCellValue().trim());
+                    } else {
+                        ogrenci.setTelno("0");
+                        ogrenci.setVeliAdi("");
                     }
+
+                    ogrenci.setDurumYok(false);
+                    ogrenci.setDurumGec(false);
+                    ogrenci.setSinif("");
+
+                    ogrenciList.add(ogrenci);
+                    stringList.add(ogrenci.getOkulno() + " " + ogrenci.getAdSoyad() + "\n       " +
+                            " Veli:" + ogrenci.getVeliAdi() + "   Tel:" + ogrenci.getTelno());
                 }
                 for (int i = 1; i < stringList.size() + 1; i++) {
                     stringList.set(i - 1, i + ")  " + stringList.get(i - 1));
                 }
-            } catch (Exception e) {
-                hatakodu1 = 10;
-                Log.e("hata", e.toString());
             }
             return null;
         }

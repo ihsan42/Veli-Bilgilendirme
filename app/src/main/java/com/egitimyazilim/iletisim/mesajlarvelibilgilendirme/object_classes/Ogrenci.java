@@ -1,9 +1,5 @@
 package com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes;
 
-import java.util.Date;
-
-import jxl.write.DateTime;
-
 public class Ogrenci {
     String sinif;
     String okulno;
