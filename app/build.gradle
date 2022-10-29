@@ -1,4 +1,6 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
     compileSdkVersion 32
@@ -6,11 +8,12 @@ android {
         applicationId "com.egitimyazilim.iletisim.mesajlarvelibilgilendirme"
         minSdkVersion 19
         targetSdkVersion 32
-        versionCode 15
-        versionName "1.15"
+        versionCode 17
+        versionName "1.17"
         multiDexEnabled true
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
+
     buildTypes {
         release {
             minifyEnabled false
