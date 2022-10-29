@@ -380,21 +380,7 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             progressDialog.dismiss();
-            if (hatakodu1 == 10) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ExceldenListeAl.this);
-                builder.setTitle("HATA");
-                builder.setMessage("Excel dosyası .XLS formatında olmalıdır." +
-                        "Dosyada değişiklik yaptıysanız <Excel 97-2003 Çalışma Kitabı> " +
-                        "formatında kaydettiğinizden emin olun!");
-                builder.setPositiveButton("Kapat", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            } else {
+
                 AdapterForPdfdenAl adapter = new AdapterForPdfdenAl(getApplicationContext(), stringList);
                 if (stringList.size() > 0) {
                     listView.setAdapter(adapter);
@@ -404,7 +390,7 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
                     Toast.makeText(getApplicationContext(), "Listelenecek öğrenci yok!", Toast.LENGTH_SHORT).show();
                 }
 
-            }
+
         }
 
         @Override

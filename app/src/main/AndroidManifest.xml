@@ -12,7 +12,8 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
@@ -35,7 +36,8 @@
         <receiver
             android:name=".messagerecieve.MMSBroadcastReceiver"
             android:permission="android.permission.BROADCAST_WAP_PUSH"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="ExtraText">
             tools:ignore="IntentFilterExportedReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER" />
