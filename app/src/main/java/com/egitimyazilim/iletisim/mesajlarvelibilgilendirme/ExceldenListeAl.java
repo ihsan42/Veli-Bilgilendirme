@@ -11,13 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.DocumentsContract;
 import android.provider.Settings;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.ActionBar;
@@ -39,17 +33,12 @@ import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.MenuConten
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.MenuContentComm;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
 
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.streaming.SXSSFSheet;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -63,15 +52,12 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
     Button buttonMenuOpen;
     Button buttonMenuClose;
     MenuContentFragment menuContentFragment;
-    String filePath = "";
     Uri fileUri;
     String sinifadi = "";
     List<String> stringList;
     List<Ogrenci> ogrenciList = new ArrayList<>();
     ListView listView;
-    int hatakodu1 = 0;
     EditText editTextSinifAdi;
-    ActivityResultLauncher<Intent> mStartForResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
