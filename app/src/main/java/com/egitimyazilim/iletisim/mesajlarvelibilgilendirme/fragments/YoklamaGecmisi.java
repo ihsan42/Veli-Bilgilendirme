@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.R;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.SMSGonder;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.Veritabani;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.AdapterForYokamaSilme;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.contentprovider.MessagesContentProviderHandler;
@@ -189,27 +190,10 @@ public class YoklamaGecmisi extends DialogFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ArrayList<PendingIntent> sentIntents=new ArrayList<>();
-                                PendingIntent sentIntent=PendingIntent.getBroadcast(getActivity(), 0, new Intent(SMS_SENT_ACTION), 0);
-
-                                ArrayList<PendingIntent> deliveryIntents=new ArrayList<>();
-                                PendingIntent deliveryIntent=PendingIntent.getBroadcast(getActivity(), 0, new Intent(SMS_DELIVERED_ACTION), 0);
+                                PendingIntent sentIntent=PendingIntent.getBroadcast(getActivity(), 0, new Intent(SMS_SENT_ACTION), PendingIntent.FLAG_MUTABLE);
 
                                 final String mesaj="Okulumuz öğrencilerinden "+gelenAdAsoyad+"\n"+tarihler;
-                                SmsManager sms = SmsManager.getDefault();
-                                ArrayList<String> parts = sms.divideMessage(mesaj);
-                                for(int i=0;i<parts.size();i++){
-                                    sentIntents.add(sentIntent);
-                                    deliveryIntents.add(deliveryIntent);
-                                }
-                                sms.sendMultipartTextMessage(gelenTelNo,null, parts, sentIntents, deliveryIntents);
-
-                                if (String.valueOf(Telephony.Sms.getDefaultSmsPackage(getActivity())).equals(getActivity().getPackageName())) {
-                                    Calendar c=Calendar.getInstance();
-                                    long time=c.getTimeInMillis();
-                                    MessagesContentProviderHandler.addSentMessageToContentProvider(getActivity(),mesaj,gelenTelNo,time);
-                                }
-
-                                Toast.makeText(getActivity(),"Gönderildi",Toast.LENGTH_SHORT).show();
+                                SMSGonder.gonder(getActivity(),gelenTelNo,mesaj,gelenAdAsoyad);
                                 dialog.dismiss();
                             }
                         });

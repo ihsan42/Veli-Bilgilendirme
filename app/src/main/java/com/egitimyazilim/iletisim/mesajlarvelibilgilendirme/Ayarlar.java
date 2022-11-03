@@ -31,6 +31,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import java.io.File;
 import java.io.FileInputStream;
@@ -147,8 +148,8 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             try {
-                                Workbook ogrencilerExelDosyasi = new SXSSFWorkbook();
-                                Sheet ogrencilerSayfasi = ogrencilerExelDosyasi.createSheet("Sınıf_Listesi");
+                                SXSSFWorkbook ogrencilerExelDosyasi = new SXSSFWorkbook();
+                                SXSSFSheet ogrencilerSayfasi = (SXSSFSheet) ogrencilerExelDosyasi.createSheet("Sinif_Listesi");
                                 Row row=ogrencilerSayfasi.createRow(0);
 
                                 Cell ders=row.createCell(1);
@@ -166,13 +167,13 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
                                 Cell veliAdi=row.createCell(18);
                                 veliAdi.setCellValue("VELİ ADI");
 
-                                String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/Veli_Bilgilendirme_Sınıf_Ekleme_Taslağı.xls";
-                                File file = new File(getExternalFilesDir(null),path);
+                                File download=Environment.getExternalStoragePublicDirectory(DOWNLOAD_SERVICE);
+                                File file = new File(download,"Veli_Bilg_Sinif_Ekleme_Taslagi.xlsx");
 
                                 FileOutputStream fileOutputStream = new FileOutputStream(file);
                                 ogrencilerExelDosyasi.write(fileOutputStream);
 
-                                Toast.makeText(getApplicationContext(), "Excel dosyası <Download> klasörüne <Veli_Bilgilendirme_Sınıf_Ekleme_Taslağı.xls> adıyla kaydedildi ", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Excel dosyası 'Download' klasörüne 'Veli_Bilgilendirme_Sinif_Ekleme_Taslagi' adıyla kaydedildi ", Toast.LENGTH_LONG).show();
 
                             } catch (Exception e) {
                                 Log.e("hata",e.getLocalizedMessage());

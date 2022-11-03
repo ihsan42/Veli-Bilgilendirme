@@ -325,10 +325,10 @@ public class Yazililar extends AppCompatActivity implements MenuContentComm {
                                                         }
 
                                                         ArrayList<PendingIntent> sentIntents = new ArrayList<>();
-                                                        PendingIntent sentIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_SENT_ACTION), 0);
+                                                        PendingIntent sentIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_SENT_ACTION), PendingIntent.FLAG_MUTABLE);
 
                                                         ArrayList<PendingIntent> deliveryIntents = new ArrayList<>();
-                                                        PendingIntent deliveryIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_DELIVERED_ACTION), 0);
+                                                        PendingIntent deliveryIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_DELIVERED_ACTION), PendingIntent.FLAG_MUTABLE);
 
                                                         SmsManager sms = SmsManager.getDefault();
                                                         ArrayList<String> parts = sms.divideMessage(mesaj);
@@ -387,27 +387,8 @@ public class Yazililar extends AppCompatActivity implements MenuContentComm {
                                                             }
                                                         }
 
-                                                        ArrayList<PendingIntent> sentIntents = new ArrayList<>();
-                                                        PendingIntent sentIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_SENT_ACTION), 0);
-
-                                                        ArrayList<PendingIntent> deliveryIntents = new ArrayList<>();
-                                                        PendingIntent deliveryIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_DELIVERED_ACTION), 0);
-
-                                                        SmsManager sms = SmsManager.getDefault();
-                                                        ArrayList<String> parts = sms.divideMessage(mesaj);
-
-                                                        for (int i = 0; i < parts.size(); i++) {
-                                                            sentIntents.add(sentIntent);
-                                                            deliveryIntents.add(deliveryIntent);
-                                                        }
-                                                        sms.sendMultipartTextMessage(ogrenci.getTelno(), null, parts, sentIntents, null);
-                                                        if (String.valueOf(Telephony.Sms.getDefaultSmsPackage(getApplicationContext())).equals(getPackageName())) {
-                                                            Calendar c=Calendar.getInstance();
-                                                            long time=c.getTimeInMillis();
-                                                            MessagesContentProviderHandler.addSentMessageToContentProvider(getApplicationContext(),mesaj,ogrenci.getTelno(),time);
-                                                        }
+                                                       SMSGonder.gonder(Yazililar.this,ogrenci.getTelno(),mesaj,ogrenci.getAdSoyad());
                                                     }
-                                                    Toast.makeText(getApplicationContext(), "Gönderildi", Toast.LENGTH_SHORT).show();
                                                     dialog.dismiss();
                                                     dialogOzel.dismiss();
                                                 }

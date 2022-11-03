@@ -20,7 +20,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.OgrenciListesi;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.R;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.SMSGonder;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.Veritabani;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.contentprovider.MessagesContentProviderHandler;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
@@ -97,27 +99,8 @@ public class MultiSpecialSms extends DialogFragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             for(Ogrenci ogrenci:smsGondList){
-                                ArrayList<PendingIntent> sentIntents=new ArrayList<>();
-                                PendingIntent sentIntent=PendingIntent.getBroadcast(getActivity(), 0, new Intent(SMS_SENT_ACTION), 0);
-
-                                ArrayList<PendingIntent> deliveryIntents=new ArrayList<>();
-                                PendingIntent deliveryIntent=PendingIntent.getBroadcast(getActivity(), 0, new Intent(SMS_DELIVERED_ACTION), 0);
-
-                                SmsManager sms = SmsManager.getDefault();
-                                ArrayList<String> parts = sms.divideMessage(mesaj);
-
-                                for(int i=0;i<parts.size();i++){
-                                    sentIntents.add(sentIntent);
-                                    deliveryIntents.add(deliveryIntent);
-                                }
-                                sms.sendMultipartTextMessage(ogrenci.getTelno(), null, parts, sentIntents, deliveryIntents);
-                                if (String.valueOf(Telephony.Sms.getDefaultSmsPackage(getActivity())).equals(getActivity().getPackageName())) {
-                                    Calendar c=Calendar.getInstance();
-                                    long time=c.getTimeInMillis();
-                                    MessagesContentProviderHandler.addSentMessageToContentProvider(getActivity(),mesaj,ogrenci.getTelno(),time);
-                                }
+                                SMSGonder.gonder(getActivity(),ogrenci.getTelno(),mesaj,ogrenci.getAdSoyad());
                             }
-                            Toast.makeText(getActivity(),"Gönderildi",Toast.LENGTH_SHORT).show();
                             dismiss();
                         }
                     });

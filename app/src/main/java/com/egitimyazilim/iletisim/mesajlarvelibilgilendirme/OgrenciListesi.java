@@ -22,6 +22,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.telephony.SubscriptionManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -62,8 +63,6 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
     Button buttonMenuOpen;
     Button buttonMenuClose;
     MenuContentFragment menuContentFragment;
-    public static final String SMS_SENT_ACTION = "com.andriodgifts.gift.SMS_SENT_ACTION";
-    public static final String SMS_DELIVERED_ACTION = "com.andriodgifts.gift.SMS_DELIVERED_ACTION";
     TextView textViewTitle;
     String sinifadi="";
     int pageIndex;
@@ -410,24 +409,7 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
                                     } else if (radioButtonHazirMesajlarim.isChecked() && mesajim.equals("Kayıtlı hazır mesaj yok!")) {
                                         Toast.makeText(getApplicationContext(), "Kayıtlı hazır mesaj yok!!", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        ArrayList<PendingIntent> sentIntents = new ArrayList<>();
-                                        PendingIntent sentIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_SENT_ACTION), 0);
-
-                                        ArrayList<PendingIntent> deliveryIntents = new ArrayList<>();
-                                        PendingIntent deliveryIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_DELIVERED_ACTION), 0);
-
-                                        SmsManager sms = SmsManager.getDefault();
-                                        ArrayList<String> parts = sms.divideMessage(mesaj);
-                                        for (int i = 0; i < parts.size(); i++) {
-                                            sentIntents.add(sentIntent);
-                                            deliveryIntents.add(deliveryIntent);
-                                        }
-                                        sms.sendMultipartTextMessage(ogrenci.getTelno(), null, parts, sentIntents, deliveryIntents);
-                                        if (String.valueOf(Telephony.Sms.getDefaultSmsPackage(getApplicationContext())).equals(getPackageName())) {
-                                            Calendar c = Calendar.getInstance();
-                                            long time = c.getTimeInMillis();
-                                            MessagesContentProviderHandler.addSentMessageToContentProvider(getApplicationContext(), mesaj, ogrenci.getTelno(), time);
-                                        }
+                                       SMSGonder.gonder(OgrenciListesi.this,ogrenci.getTelno(),mesaj,ogrenci.getAdSoyad());
                                     }
                                 }
                                 String dersadi = "";
@@ -442,7 +424,6 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
                                 } else if (radioButtonHazirMesajlarim.isChecked() && mesajim.equals("Kayıtlı hazır mesaj yok!")) {
                                 } else {
                                     dialog2.dismiss();
-                                    Toast.makeText(getApplicationContext(), "Gönderildi", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -1067,24 +1048,7 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
                                         if(radioButtonDerse.isChecked() && dersadi.equals("Kayıtlı ders yok!")){
                                             Toast.makeText(getApplicationContext(),"Kayıtlı ders yok!",Toast.LENGTH_SHORT).show();
                                         }else{
-                                            ArrayList<PendingIntent> sentIntents=new ArrayList<>();
-                                            PendingIntent sentIntent=PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_SENT_ACTION), 0);
-
-                                            ArrayList<PendingIntent> deliveryIntents=new ArrayList<>();
-                                            PendingIntent deliveryIntent=PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_DELIVERED_ACTION), 0);
-
-                                            SmsManager sms = SmsManager.getDefault();
-                                            ArrayList<String> parts = sms.divideMessage(mesaj);
-                                            for(int i=0;i<parts.size();i++){
-                                                sentIntents.add(sentIntent);
-                                                deliveryIntents.add(deliveryIntent);
-                                            }
-                                            sms.sendMultipartTextMessage(ogrenci.getTelno(),null, parts, sentIntents, deliveryIntents);
-                                            if (String.valueOf(Telephony.Sms.getDefaultSmsPackage(getApplicationContext())).equals(getPackageName())) {
-                                                Calendar c=Calendar.getInstance();
-                                                long time=c.getTimeInMillis();
-                                                MessagesContentProviderHandler.addSentMessageToContentProvider(getApplicationContext(),mesaj,ogrenci.getTelno(),time);
-                                            }
+                                            SMSGonder.gonder(OgrenciListesi.this,ogrenci.getTelno(),mesaj,ogrenci.getAdSoyad());
                                         }
                                     }
 
@@ -1183,24 +1147,7 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
                                         if(radioButtonDerse.isChecked() && dersadi.equals("Kayıtlı ders yok!")){
                                             Toast.makeText(getApplicationContext(),"Kayıtlı ders yok!",Toast.LENGTH_SHORT).show();
                                         }else{
-                                            ArrayList<PendingIntent> sentIntents=new ArrayList<>();
-                                            PendingIntent sentIntent=PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_SENT_ACTION), 0);
-
-                                            ArrayList<PendingIntent> deliveryIntents=new ArrayList<>();
-                                            PendingIntent deliveryIntent=PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_DELIVERED_ACTION), 0);
-
-                                            SmsManager sms = SmsManager.getDefault();
-                                            ArrayList<String> parts = sms.divideMessage(mesaj);
-                                            for(int i=0;i<parts.size();i++){
-                                                sentIntents.add(sentIntent);
-                                                deliveryIntents.add(deliveryIntent);
-                                            }
-                                            sms.sendMultipartTextMessage(ogrenci.getTelno(),null, parts, sentIntents, deliveryIntents);
-                                            if (String.valueOf(Telephony.Sms.getDefaultSmsPackage(getApplicationContext())).equals(getPackageName())) {
-                                                Calendar c=Calendar.getInstance();
-                                                long time=c.getTimeInMillis();
-                                                MessagesContentProviderHandler.addSentMessageToContentProvider(getApplicationContext(),mesaj,ogrenci.getTelno(),time);
-                                            }
+                                            SMSGonder.gonder(OgrenciListesi.this,ogrenci.getTelno(),mesaj,ogrenci.getAdSoyad());
                                         }
                                     }
                                     String dersadi="";
@@ -1210,7 +1157,6 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
                                     if(radioButtonDerse.isChecked() && dersadi.equals("Kayıtlı ders yok!")){ }
                                     else{
                                         dialog1.dismiss();
-                                        Toast.makeText(getApplicationContext(),"Gönderildi",Toast.LENGTH_SHORT).show();
                                     }
                                     //editTextSearch.setText("");
                                 }

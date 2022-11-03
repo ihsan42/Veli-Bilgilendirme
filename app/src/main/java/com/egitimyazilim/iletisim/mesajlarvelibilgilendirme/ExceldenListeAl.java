@@ -389,7 +389,7 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
             try {
                 inputStream = getContentResolver().openInputStream(fileUri);
                 CalismaKitabi = WorkbookFactory.create(inputStream);
-            } catch (InvalidFormatException | IOException e) {
+            } catch (IOException | InvalidFormatException e) {
                 e.printStackTrace();
             }
             Sheet sheet = CalismaKitabi.getSheetAt(0);

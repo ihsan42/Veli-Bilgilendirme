@@ -273,25 +273,7 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
         if (phone.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please Enter a Valid Phone Number", Toast.LENGTH_SHORT).show();
         } else {
-            ArrayList<PendingIntent> sentIntents=new ArrayList<>();
-            PendingIntent sentIntent=PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_SENT_ACTION), 0);
-
-            ArrayList<PendingIntent> deliveryIntents=new ArrayList<>();
-            PendingIntent deliveryIntent=PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_DELIVERED_ACTION), 0);
-
-            SmsManager sms = SmsManager.getDefault();
-            ArrayList<String> parts = sms.divideMessage(message);
-            for(int i=0;i<parts.size();i++){
-                sentIntents.add(sentIntent);
-                deliveryIntents.add(deliveryIntent);
-            }
-            sms.sendMultipartTextMessage(phone,null, parts, sentIntents, deliveryIntents);
-
-            if (Telephony.Sms.getDefaultSmsPackage(getApplicationContext()).equals(getPackageName())) {
-                Calendar c=Calendar.getInstance();
-                long time=c.getTimeInMillis();
-                MessagesContentProviderHandler.addSentMessageToContentProvider(getApplicationContext(),message,kisiTel,time);
-            }
+           SMSGonder.gonder(ComposeSmsActivity.this,phone,message,null);
         }
             editTextMesaj.setText("");
     }
