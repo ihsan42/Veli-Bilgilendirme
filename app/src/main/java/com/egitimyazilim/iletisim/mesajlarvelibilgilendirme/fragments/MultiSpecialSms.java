@@ -20,15 +20,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.OgrenciListesi;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.R;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.SMSGonder;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.Veritabani;
-import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.contentprovider.MessagesContentProviderHandler;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -39,11 +36,21 @@ public class MultiSpecialSms extends DialogFragment {
     public static final String SMS_DELIVERED_ACTION = "com.andriodgifts.gift.SMS_DELIVERED_ACTION";
     private static int MY_PERMISSIONS_SEND_SMS=1991;
     List<Ogrenci> smsGondList;
+    SmsManager[] smsManager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.ozel_sms_gonderme,null,false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        smsManager= new SmsManager[]{SmsManager.getDefault()};
+        if(SMSGonder.isDualSimAvailable(getActivity())){
+            SMSGonder.getDefaultSMSManeger(getActivity(),smsManager);
+        }
     }
 
     @Override
@@ -99,7 +106,8 @@ public class MultiSpecialSms extends DialogFragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             for(Ogrenci ogrenci:smsGondList){
-                                SMSGonder.gonder(getActivity(),ogrenci.getTelno(),mesaj,ogrenci.getAdSoyad());
+                                SMSGonder.gonder(getActivity(),smsManager[0]
+                                        ,ogrenci.getTelno(),mesaj,ogrenci.getAdSoyad());
                             }
                             dismiss();
                         }

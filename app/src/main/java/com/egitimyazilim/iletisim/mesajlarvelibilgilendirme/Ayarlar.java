@@ -156,10 +156,10 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
                                 ders.setCellValue("ÖĞRENCİ NO");
 
                                 Cell ad=row.createCell(4);
-                                ad.setCellValue("AD");
+                                ad.setCellValue("AD (Ad-Soyad da girebilirsiniz)");
 
                                 Cell soyad=row.createCell(9);
-                                soyad.setCellValue("SOYAD");
+                                soyad.setCellValue("SOYAD (Boş bırakabilirsiniz)");
 
                                 Cell telNo=row.createCell(16);
                                 telNo.setCellValue("TELEFON NO");

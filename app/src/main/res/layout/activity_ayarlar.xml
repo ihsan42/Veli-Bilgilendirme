@@ -15,7 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -26,75 +26,79 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@color/colorPrimaryDark"
+                    android:gravity="center"
                     android:text="Ayarlar"
                     android:textColor="@color/colorTitleText"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:textSize="18dp" />
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
 
                 <Switch
                     android:id="@+id/switchOkulAdi"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_below="@id/textView2"
-                    android:textColor="@android:color/black"
-                    android:textSize="15dp"
                     android:paddingLeft="10dp"
-                    android:text="Gönderilen SMS'lere okul ismi eklensin" />
+                    android:text="Gönderilen SMS'lere okul ismi eklensin"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp" />
 
                 <Switch
                     android:id="@+id/switchIsim"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="15dp"
                     android:layout_below="@id/switchOkulAdi"
                     android:paddingLeft="10dp"
-                    android:text="Gönderilen SMS'lere ismim eklensin" />
+                    android:text="Gönderilen SMS'lere ismim eklensin"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp" />
 
                 <Switch
                     android:id="@+id/switchBrans"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="15dp"
                     android:layout_below="@id/switchIsim"
-                    android:paddingLeft="10dp"
                     android:layout_marginBottom="20dp"
-                    android:text="Gönderilen SMS'lere branşım eklensin" />
+                    android:paddingLeft="10dp"
+                    android:text="Gönderilen SMS'lere branşım eklensin"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp" />
 
                 <Button
                     android:id="@+id/buttonAyarYedektenAl"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:textSize="15dp"
-                    android:textColor="@color/colorTitleText"
-                    android:background="@color/colorPrimaryDark"
-                    android:layout_margin="5dp"
                     android:layout_below="@id/switchBrans"
-                    android:text="Yedekten Al" />
+                    android:layout_margin="5dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:text="Yedekten Al"
+                    android:textColor="@color/colorTitleText"
+                    android:textSize="15dp" />
 
                 <Button
                     android:id="@+id/buttonAyarYedekle"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:textSize="15dp"
-                    android:textColor="@color/colorTitleText"
-                    android:background="@color/colorPrimaryDark"
-                    android:layout_margin="5dp"
                     android:layout_below="@id/buttonAyarYedektenAl"
-                    android:text="Yedekle" />
+                    android:layout_margin="5dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:text="Yedekle"
+                    android:textColor="@color/colorTitleText"
+                    android:textSize="15dp" />
 
                 <Button
                     android:id="@+id/buttonAyarExcelTaslak"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:textSize="15dp"
-                    android:textColor="@color/colorTitleText"
-                    android:background="@color/colorPrimaryDark"
-                    android:layout_margin="5dp"
                     android:layout_below="@id/buttonAyarYedekle"
-                    android:text="Sınıf Listesi İçin Excel Taslağı İndir" />
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:text="Sınıf Listesi İçin Excel Taslağı İndir"
+                    android:textColor="@color/colorTitleText"
+                    android:textSize="15dp"
+                    android:visibility="invisible" />
 
             </RelativeLayout>
         </LinearLayout>

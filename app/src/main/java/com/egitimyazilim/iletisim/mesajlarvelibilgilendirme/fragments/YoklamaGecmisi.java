@@ -25,17 +25,14 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.R;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.SMSGonder;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.Veritabani;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.AdapterForYokamaSilme;
-import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.contentprovider.MessagesContentProviderHandler;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.CommYoklama;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class YoklamaGecmisi extends DialogFragment {
@@ -183,17 +180,17 @@ public class YoklamaGecmisi extends DialogFragment {
                                 }
                             }
                         }
+                        SmsManager[] smsManager={SmsManager.getDefault()};
+
                         AlertDialog.Builder builder1=new AlertDialog.Builder(getActivity());
                         builder1.setTitle("SMS gönderilsin mi?");
                         builder1.setMessage("Okulumuz öğrencilerinden "+gelenAdAsoyad+"\n"+tarihler);
                         builder1.setPositiveButton("Gönder", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ArrayList<PendingIntent> sentIntents=new ArrayList<>();
-                                PendingIntent sentIntent=PendingIntent.getBroadcast(getActivity(), 0, new Intent(SMS_SENT_ACTION), PendingIntent.FLAG_MUTABLE);
-
                                 final String mesaj="Okulumuz öğrencilerinden "+gelenAdAsoyad+"\n"+tarihler;
-                                SMSGonder.gonder(getActivity(),gelenTelNo,mesaj,gelenAdAsoyad);
+
+                                SMSGonder.gonder(getActivity(),smsManager[0],gelenTelNo,mesaj,gelenAdAsoyad);
                                 dialog.dismiss();
                             }
                         });
@@ -205,6 +202,10 @@ public class YoklamaGecmisi extends DialogFragment {
                         });
                         AlertDialog alertDialog=builder1.create();
                         alertDialog.show();
+
+                        if(SMSGonder.isDualSimAvailable(getActivity())){
+                            SMSGonder.getDefaultSMSManeger(getActivity(),smsManager);
+                        }
                     }
                 }
             }

@@ -250,6 +250,13 @@ public class Yazililar extends AppCompatActivity implements MenuContentComm {
                             }
                         }
                         if (izinVarMi==true) {
+                            dialogOzel.show();
+
+                            SmsManager[] smsManager={SmsManager.getDefault()};
+                            if(SMSGonder.isDualSimAvailable(Yazililar.this)){
+                                SMSGonder.getDefaultSMSManeger(Yazililar.this,smsManager);
+                            }
+
                             buttonGonder.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -323,28 +330,8 @@ public class Yazililar extends AppCompatActivity implements MenuContentComm {
                                                                 mesaj = "Okulumuz öğrencilerinden " + ogrenci.getAdSoyad() + " " + dersadi + " 1. yazılısından " + ogrenci.getYazili1() + " aldı.";
                                                             }
                                                         }
-
-                                                        ArrayList<PendingIntent> sentIntents = new ArrayList<>();
-                                                        PendingIntent sentIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_SENT_ACTION), PendingIntent.FLAG_MUTABLE);
-
-                                                        ArrayList<PendingIntent> deliveryIntents = new ArrayList<>();
-                                                        PendingIntent deliveryIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(SMS_DELIVERED_ACTION), PendingIntent.FLAG_MUTABLE);
-
-                                                        SmsManager sms = SmsManager.getDefault();
-                                                        ArrayList<String> parts = sms.divideMessage(mesaj);
-
-                                                        for (int i = 0; i < parts.size(); i++) {
-                                                            sentIntents.add(sentIntent);
-                                                            deliveryIntents.add(deliveryIntent);
-                                                        }
-                                                        sms.sendMultipartTextMessage(ogrenci.getTelno(), null, parts, sentIntents, deliveryIntents);
-                                                        if (String.valueOf(Telephony.Sms.getDefaultSmsPackage(getApplicationContext())).equals(getPackageName())) {
-                                                            Calendar c=Calendar.getInstance();
-                                                            long time=c.getTimeInMillis();
-                                                            MessagesContentProviderHandler.addSentMessageToContentProvider(getApplicationContext(),mesaj,ogrenci.getTelno(),time);
-                                                        }
+                                                        SMSGonder.gonder(getApplicationContext(),smsManager[0],ogrenci.getTelno(),mesaj,ogrenci.getAdSoyad());
                                                     }
-                                                    Toast.makeText(getApplicationContext(), "Gönderildi", Toast.LENGTH_SHORT).show();
                                                     dialog.dismiss();
                                                     dialogOzel.dismiss();
                                                 } else if (radioButtonYazili2.isChecked()) {
@@ -386,8 +373,8 @@ public class Yazililar extends AppCompatActivity implements MenuContentComm {
                                                                 mesaj = "Okulumuz öğrencilerinden " + ogrenci.getAdSoyad() + " " + dersadi + " 2. yazılısından " + ogrenci.getYazili2() + " aldı.";
                                                             }
                                                         }
-
-                                                       SMSGonder.gonder(Yazililar.this,ogrenci.getTelno(),mesaj,ogrenci.getAdSoyad());
+                                                       SMSGonder.gonder(getApplicationContext(),smsManager[0]
+                                                               ,ogrenci.getTelno(),mesaj,ogrenci.getAdSoyad());
                                                     }
                                                     dialog.dismiss();
                                                     dialogOzel.dismiss();
@@ -412,9 +399,6 @@ public class Yazililar extends AppCompatActivity implements MenuContentComm {
                                     dialogOzel.dismiss();
                                 }
                             });
-
-                            dialogOzel.show();
-
                         } else {
                             List<Integer> birDahaSormaSayisi = new ArrayList<>();
                             for (String izin : izinler) {

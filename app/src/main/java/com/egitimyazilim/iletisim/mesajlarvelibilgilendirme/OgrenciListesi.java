@@ -10,10 +10,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
 import android.provider.Telephony;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.core.content.ContextCompat;
@@ -283,6 +285,12 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
                     if (secilenler.size() == 0) {
                         Toast.makeText(getApplicationContext(), "Seçilen yok!", Toast.LENGTH_SHORT).show();
                     } else {
+                        dialog2.show();
+                        SmsManager[] smsManager={SmsManager.getDefault()};
+                        if(SMSGonder.isDualSimAvailable(getApplicationContext())){
+                            SMSGonder.getDefaultSMSManeger(OgrenciListesi.this,smsManager);
+                        }
+
                         String mesajGonderilecekler = "\n" + "SMS GÖNDERİLECEKLER" + "\n" + "\n";
                         for (Ogrenci ogrenci : secilenler) {
                             mesajGonderilecekler += ogrenci.getAdSoyad() + "\n";
@@ -409,7 +417,8 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
                                     } else if (radioButtonHazirMesajlarim.isChecked() && mesajim.equals("Kayıtlı hazır mesaj yok!")) {
                                         Toast.makeText(getApplicationContext(), "Kayıtlı hazır mesaj yok!!", Toast.LENGTH_SHORT).show();
                                     } else {
-                                       SMSGonder.gonder(OgrenciListesi.this,ogrenci.getTelno(),mesaj,ogrenci.getAdSoyad());
+                                       SMSGonder.gonder(getApplicationContext(),smsManager[0]
+                                               ,ogrenci.getTelno(),mesaj,ogrenci.getAdSoyad());
                                     }
                                 }
                                 String dersadi = "";
@@ -434,8 +443,6 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
                                 dialog2.dismiss();
                             }
                         });
-
-                        dialog2.show();
                     }
                 } else {
                     List<Integer> birDahaSormaSayisi = new ArrayList<>();
@@ -903,6 +910,11 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
                     if(ogrenciList.size()==0){
                         Toast.makeText(getApplicationContext(),"Bu sınıfa kayıtlı öğrenci yok!",Toast.LENGTH_SHORT).show();
                     }else{
+                        dialog1.show();
+                        SmsManager[] smsManager={SmsManager.getDefault()};
+                        if(SMSGonder.isDualSimAvailable(getApplicationContext())){
+                            SMSGonder.getDefaultSMSManeger(OgrenciListesi.this,smsManager);
+                        }
 
                         final List<Ogrenci> gelmeyenler=new ArrayList<>();
                         final List<Ogrenci> gecGelenler=new ArrayList<>();
@@ -1048,7 +1060,8 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
                                         if(radioButtonDerse.isChecked() && dersadi.equals("Kayıtlı ders yok!")){
                                             Toast.makeText(getApplicationContext(),"Kayıtlı ders yok!",Toast.LENGTH_SHORT).show();
                                         }else{
-                                            SMSGonder.gonder(OgrenciListesi.this,ogrenci.getTelno(),mesaj,ogrenci.getAdSoyad());
+                                            SMSGonder.gonder(OgrenciListesi.this
+                                                    , smsManager[0],ogrenci.getTelno(), mesaj,ogrenci.getAdSoyad());
                                         }
                                     }
 
@@ -1147,7 +1160,8 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
                                         if(radioButtonDerse.isChecked() && dersadi.equals("Kayıtlı ders yok!")){
                                             Toast.makeText(getApplicationContext(),"Kayıtlı ders yok!",Toast.LENGTH_SHORT).show();
                                         }else{
-                                            SMSGonder.gonder(OgrenciListesi.this,ogrenci.getTelno(),mesaj,ogrenci.getAdSoyad());
+                                            SMSGonder.gonder(OgrenciListesi.this
+                                                    , smsManager[0],ogrenci.getTelno(), mesaj,ogrenci.getAdSoyad());
                                         }
                                     }
                                     String dersadi="";
@@ -1168,7 +1182,6 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
                                     dialog1.dismiss();
                                 }
                             });
-                            dialog1.show();
                         }
                     }
                 } else {

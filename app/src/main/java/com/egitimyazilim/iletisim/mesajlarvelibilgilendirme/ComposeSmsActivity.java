@@ -5,14 +5,17 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.loader.app.LoaderManager;
 import androidx.core.content.ContextCompat;
 import androidx.loader.content.CursorLoader;
@@ -22,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.telephony.SmsManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,7 +62,6 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
     String kisiTel="";
     private LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
     private static final int requestPermissionsCode = 1990;
-
 
     private BroadcastReceiver sentStatusReceiver, deliveredStatusReceiver;
 
@@ -137,7 +140,6 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
                 } else {
                     Toast.makeText(getApplicationContext(), "Sms gönderebilmeniz için eksik izinler var! Lütfen uygulama izinlerini kontrol ediniz.", Toast.LENGTH_LONG).show();
                 }
-
             }
         });
     }
@@ -191,7 +193,7 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
                     String num = c.getString(c.getColumnIndexOrThrow("address"));
                     objChats.setSender(num);
                     objChats.setMessage(c.getString(c.getColumnIndexOrThrow("body")));
-                    objChats.setSms_read(c.getString(c.getColumnIndex("read")));
+                    objChats.setSms_read(c.getString(c.getColumnIndexOrThrow("read")));
                     objChats.setTime(c.getLong(c.getColumnIndexOrThrow("date")));
                     // objChats.setSent_time(c.getLong(c.getColumnIndexOrThrow("date_sent")));
                     if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
@@ -268,12 +270,48 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
 
     public void sendMySMS() {
         String phone =kisiTel;//editTextAlici.getText().toString();
-        String message = editTextMesaj.getText().toString();
+        String message = String.valueOf(editTextMesaj.getText()).trim();
         //Check if the phoneNumber is empty
         if (phone.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Please Enter a Valid Phone Number", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "geçerli bir telefon numarası giriniz.", Toast.LENGTH_SHORT).show();
         } else {
-           SMSGonder.gonder(ComposeSmsActivity.this,phone,message,null);
+            if(TextUtils.isEmpty(message)){
+                Toast.makeText(getApplicationContext(), "mesaj yazılmamış!", Toast.LENGTH_SHORT).show();
+            }else{
+                if(SMSGonder.isDualSimAvailable(getApplicationContext())){
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ComposeSmsActivity.this);
+                    builder.setCancelable(false);
+                    builder.setTitle("Hat seçiniz!");
+                    builder.setPositiveButton("2.Hat", new DialogInterface.OnClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int ii) {
+                            SmsManager smsManager = SmsManager.getSmsManagerForSubscriptionId(1);
+                            SMSGonder.gonder(ComposeSmsActivity.this,smsManager
+                                    ,phone,message,null);
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    builder.setNeutralButton("1.hat", new DialogInterface.OnClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int ii) {
+                            SmsManager smsManager = SmsManager.getSmsManagerForSubscriptionId(0);
+                            SMSGonder.gonder(ComposeSmsActivity.this
+                                    ,smsManager,phone,message,null);
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    android.app.AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }else{
+                    SmsManager smsManager = SmsManager.getDefault();
+                    SMSGonder.gonder(ComposeSmsActivity.this
+                            ,smsManager,phone,message,null);
+                }
+
+            }
+
         }
             editTextMesaj.setText("");
     }
