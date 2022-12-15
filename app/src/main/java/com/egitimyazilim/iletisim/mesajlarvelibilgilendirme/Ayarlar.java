@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
 import androidx.core.app.ActivityCompat;
@@ -27,17 +28,24 @@ import android.widget.Switch;
 import android.widget.Toast;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.MenuContentFragment;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.MenuContentComm;
+
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -68,11 +76,11 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
         bar = getSupportActionBar();
         bar.hide();
 
-        buttonMenuOpen=(Button)findViewById(R.id.buttonMenuOpen);
-        buttonMenuClose=(Button)findViewById(R.id.buttonMenuClose);
+        buttonMenuOpen = (Button) findViewById(R.id.buttonMenuOpen);
+        buttonMenuClose = (Button) findViewById(R.id.buttonMenuClose);
 
         fm = getSupportFragmentManager();
-        menuContentFragment=(MenuContentFragment)fm.findFragmentById(R.id.fragmentMenu);
+        menuContentFragment = (MenuContentFragment) fm.findFragmentById(R.id.fragmentMenu);
         fm.beginTransaction().hide(menuContentFragment).commit();
 
         buttonMenuOpen.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +143,7 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
                         AlertDialog alertDialog = builder.create();
                         alertDialog.show();
                     }
-                }else{
+                } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(Ayarlar.this);
                     builder.setTitle("Dosya İndirilsin mi?");
                     builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
@@ -147,36 +155,50 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
                     builder.setPositiveButton("İndir", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            File download = Environment.getExternalStoragePublicDirectory(DOWNLOAD_SERVICE);
+                            File myfileClone = new File(download, "Veli_Bilgilendirme_Sınıf_Ekleme_Taslağı.xlsx");
+
+                            InputStream in = null;
                             try {
-                                SXSSFWorkbook ogrencilerExelDosyasi = new SXSSFWorkbook();
-                                SXSSFSheet ogrencilerSayfasi = (SXSSFSheet) ogrencilerExelDosyasi.createSheet("Sinif_Listesi");
-                                Row row=ogrencilerSayfasi.createRow(0);
+                                in = getAssets().open("Veli_Bilgilendirme_Sınıf_Ekleme_Taslağı.xlsx");
+                            } catch (IOException e) {
+                                Log.e("DosyaOkumaHatası", e.getMessage());
+                                Toast.makeText(getApplicationContext()
+                                        , "DosyaOkumaHatası "+e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                            OutputStream out = null;
+                            try {
+                                out = new FileOutputStream(myfileClone);
+                            } catch (FileNotFoundException e) {
+                                Log.e("DosyaYazmaHatası", e.getMessage());
+                                Toast.makeText(getApplicationContext()
+                                        , "DosyaYazmaHatası " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                            try {
+                               if(in!=null && out!=null){
+                                   byte[] buf = new byte[1024];
+                                   int len;
+                                   while ((len = in.read(buf)) > 0) {
+                                       out.write(buf, 0, len);
+                                   }
+                                   Toast.makeText(getApplicationContext()
+                                           , "Excel dosyası 'Download' klasörüne " +
+                                                   "'Veli_Bilgilendirme_Sinif_Ekleme_Taslagi'" +
+                                                   " adıyla kaydedildi ", Toast.LENGTH_LONG).show();
+                               }
 
-                                Cell ders=row.createCell(1);
-                                ders.setCellValue("ÖĞRENCİ NO");
-
-                                Cell ad=row.createCell(4);
-                                ad.setCellValue("AD (Ad-Soyad da girebilirsiniz)");
-
-                                Cell soyad=row.createCell(9);
-                                soyad.setCellValue("SOYAD (Boş bırakabilirsiniz)");
-
-                                Cell telNo=row.createCell(16);
-                                telNo.setCellValue("TELEFON NO");
-
-                                Cell veliAdi=row.createCell(18);
-                                veliAdi.setCellValue("VELİ ADI");
-
-                                File download=Environment.getExternalStoragePublicDirectory(DOWNLOAD_SERVICE);
-                                File file = new File(download,"Veli_Bilg_Sinif_Ekleme_Taslagi.xlsx");
-
-                                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                                ogrencilerExelDosyasi.write(fileOutputStream);
-
-                                Toast.makeText(getApplicationContext(), "Excel dosyası 'Download' klasörüne 'Veli_Bilgilendirme_Sinif_Ekleme_Taslagi' adıyla kaydedildi ", Toast.LENGTH_LONG).show();
-
-                            } catch (Exception e) {
-                                Log.e("hata",e.getLocalizedMessage());
+                            } catch (IOException e) {
+                                Log.e("KlonlamaHatası", e.getMessage());
+                                Toast.makeText(getApplicationContext()
+                                        ,"KlonlamaHatası "+ e.getMessage(), Toast.LENGTH_LONG).show();
+                            } finally {
+                                try {
+                                    out.close();
+                                } catch (IOException e) {
+                                    Log.e("OutKapatmaHatası", e.getMessage());
+                                    Toast.makeText(getApplicationContext()
+                                            , "OutKapatmaHatası "+ e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
                             }
                         }
                     });
@@ -275,9 +297,9 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
                         public void onClick(DialogInterface dialog, int which) {
                             Calendar c = Calendar.getInstance();
                             SimpleDateFormat df2 = new SimpleDateFormat("dd.MM.yyyy kk.mm.ss");
-                            final String tarihBugun= df2.format(c.getTime());
+                            final String tarihBugun = df2.format(c.getTime());
 
-                            yedekle(Ayarlar.this,"Yedek Veli Bilgilendirme  "+tarihBugun);
+                            yedekle(Ayarlar.this, "Yedek Veli Bilgilendirme  " + tarihBugun);
                         }
                     });
                     builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
@@ -322,7 +344,7 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
             @Override
             public void onClick(View v) {
                 if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                   dosyaYoneticisiniAc();
+                    dosyaYoneticisiniAc();
                 } else {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(Ayarlar.this, depolamaIzni[0])) {
                         ActivityCompat.requestPermissions(Ayarlar.this, depolamaIzni, requestCodePermissionRead);

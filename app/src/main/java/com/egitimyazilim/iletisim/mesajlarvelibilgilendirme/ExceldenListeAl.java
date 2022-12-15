@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -300,24 +301,41 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
                 MimeTypeMap mime = MimeTypeMap.getSingleton();
                 String type = mime.getExtensionFromMimeType(cR.getType(fileUri));
 
-                Log.e("PATH",type);
-                if(type.equals("XLS") || type.equals("xls")
-                        || type.equals("XLSX") || type.equals("xlsx")){
-                    new Listele().execute();
-                }else{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ExceldenListeAl.this);
-                    builder.setTitle("HATA!");
-                    builder.setMessage("Excel dosyası seçmediniz! Lüften  uzantısı '.XLS' , '.xls' , '.XLSX'" +
-                            " veya '.xlsx' olan Excel dosyası seçiniz.");
-                    builder.setNeutralButton("Kapat", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    AlertDialog dialog=builder.create();
-                    dialog.show();
-                }
+               if(TextUtils.isEmpty(type)){
+                   AlertDialog.Builder builder = new AlertDialog.Builder(ExceldenListeAl.this);
+                   builder.setTitle("HATA!");
+                   builder.setMessage("Seçtiğiniz dosya bu klasördeyken cihazınız tarafından tanınmıyor. " +
+                           "Genelde bu hata 'İndirilenler'den dosya seçilirken meydana gelir." +
+                           " Lütfen bu dosyayı 'İndirilenler'den değil de 'Dahili Depolama/ Download'" +
+                           " klasöründen seçiniz.");
+                   builder.setNeutralButton("Kapat", new DialogInterface.OnClickListener() {
+                       @Override
+                       public void onClick(DialogInterface dialog, int which) {
+                           dialog.dismiss();
+                       }
+                   });
+                   AlertDialog dialog=builder.create();
+                   dialog.show();
+               }else{
+                   Log.e("PATH",type);
+                   if(type.equals("XLS") || type.equals("xls")
+                           || type.equals("XLSX") || type.equals("xlsx")){
+                       new Listele().execute();
+                   }else{
+                       AlertDialog.Builder builder = new AlertDialog.Builder(ExceldenListeAl.this);
+                       builder.setTitle("HATA!");
+                       builder.setMessage("Excel dosyası seçmediniz! Lüften  uzantısı '.XLS' , '.xls' , '.XLSX'" +
+                               " veya '.xlsx' olan Excel dosyası seçiniz.");
+                       builder.setNeutralButton("Kapat", new DialogInterface.OnClickListener() {
+                           @Override
+                           public void onClick(DialogInterface dialog, int which) {
+                               dialog.dismiss();
+                           }
+                       });
+                       AlertDialog dialog=builder.create();
+                       dialog.show();
+                   }
+               }
             }
         }
     }
@@ -443,19 +461,21 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
                 }
 
                 Boolean eOkulLisedenMi = false;
-                cell = sheet.getRow(3).getCell(0);
-                if (cell != null) {
-                    switch (cell.getCellType()) {
-                        case Cell.CELL_TYPE_NUMERIC:
-                            if (String.valueOf(cell.getNumericCellValue()).equals(siraNo)) {
-                                eOkulLisedenMi = true;
-                            }
-                            break;
-                        case Cell.CELL_TYPE_STRING:
-                            if (cell.getStringCellValue().equals(siraNo)) {
-                                eOkulLisedenMi = true;
-                            }
-                            break;
+                if(sheet.getLastRowNum()>2){
+                    cell = sheet.getRow(3).getCell(0);
+                    if (cell != null) {
+                        switch (cell.getCellType()) {
+                            case Cell.CELL_TYPE_NUMERIC:
+                                if (String.valueOf(cell.getNumericCellValue()).equals(siraNo)) {
+                                    eOkulLisedenMi = true;
+                                }
+                                break;
+                            case Cell.CELL_TYPE_STRING:
+                                if (cell.getStringCellValue().equals(siraNo)) {
+                                    eOkulLisedenMi = true;
+                                }
+                                break;
+                        }
                     }
                 }
 
@@ -493,10 +513,10 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
                     sheet.removeRow(row);
                 }
 
-                Log.e("bool", eOkulOrtaOkuldanMi.toString() + "," + eOkulLisedenMi.toString() + "," + taslaktanMi.toString());
+               // Log.e("bool", eOkulOrtaOkuldanMi.toString() + "," + eOkulLisedenMi.toString() + "," + taslaktanMi.toString());
 
                 if (eOkulOrtaOkuldanMi || eOkulLisedenMi || taslaktanMi) {
-                    if (sheet.getLastRowNum() > 1) {
+                    if (sheet.getLastRowNum() > 0) {
                         int k=1;
                         if(eOkulLisedenMi){
                             k=4;
@@ -531,11 +551,15 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
                                 soyad = row.getCell(9);
                             }
 
-                            if(ad!=null && soyad!=null){
-                                String isim = ad.getStringCellValue().trim();
-                                String soyIsim = soyad.getStringCellValue().trim();
-                                ogrenci.setAdSoyad(isim + " " + soyIsim);
+                            String isim="";
+                            if(ad!=null){
+                                 isim = ad.getStringCellValue().trim();
                             }
+                            String soyIsim="";
+                            if(soyad!=null){
+                                 soyIsim = soyad.getStringCellValue().trim();
+                            }
+                            ogrenci.setAdSoyad(isim + " " + soyIsim);
 
                             if (row.getLastCellNum() > 14) {
                                 Cell telNo = row.getCell(16);

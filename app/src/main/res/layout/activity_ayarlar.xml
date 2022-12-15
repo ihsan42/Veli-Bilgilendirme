@@ -98,7 +98,7 @@
                     android:text="Sınıf Listesi İçin Excel Taslağı İndir"
                     android:textColor="@color/colorTitleText"
                     android:textSize="15dp"
-                    android:visibility="invisible" />
+                    android:visibility="visible" />
 
             </RelativeLayout>
         </LinearLayout>
