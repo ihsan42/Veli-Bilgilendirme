@@ -164,7 +164,7 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
                             } catch (IOException e) {
                                 Log.e("DosyaOkumaHatası", e.getMessage());
                                 Toast.makeText(getApplicationContext()
-                                        , "DosyaOkumaHatası "+e.getMessage(), Toast.LENGTH_LONG).show();
+                                        , "DosyaOkumaHatası " + e.getMessage(), Toast.LENGTH_LONG).show();
                             }
                             OutputStream out = null;
                             try {
@@ -175,29 +175,29 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
                                         , "DosyaYazmaHatası " + e.getMessage(), Toast.LENGTH_LONG).show();
                             }
                             try {
-                               if(in!=null && out!=null){
-                                   byte[] buf = new byte[1024];
-                                   int len;
-                                   while ((len = in.read(buf)) > 0) {
-                                       out.write(buf, 0, len);
-                                   }
-                                   Toast.makeText(getApplicationContext()
-                                           , "Excel dosyası 'Download' klasörüne " +
-                                                   "'Veli_Bilgilendirme_Sinif_Ekleme_Taslagi'" +
-                                                   " adıyla kaydedildi ", Toast.LENGTH_LONG).show();
-                               }
+                                if (in != null && out != null) {
+                                    byte[] buf = new byte[1024];
+                                    int len;
+                                    while ((len = in.read(buf)) > 0) {
+                                        out.write(buf, 0, len);
+                                    }
+                                    Toast.makeText(getApplicationContext()
+                                            , "Excel dosyası 'Download' klasörüne " +
+                                                    "'Veli_Bilgilendirme_Sinif_Ekleme_Taslagi'" +
+                                                    " adıyla kaydedildi ", Toast.LENGTH_LONG).show();
+                                }
 
                             } catch (IOException e) {
                                 Log.e("KlonlamaHatası", e.getMessage());
                                 Toast.makeText(getApplicationContext()
-                                        ,"KlonlamaHatası "+ e.getMessage(), Toast.LENGTH_LONG).show();
+                                        , "KlonlamaHatası " + e.getMessage(), Toast.LENGTH_LONG).show();
                             } finally {
                                 try {
                                     out.close();
                                 } catch (IOException e) {
                                     Log.e("OutKapatmaHatası", e.getMessage());
                                     Toast.makeText(getApplicationContext()
-                                            , "OutKapatmaHatası "+ e.getMessage(), Toast.LENGTH_LONG).show();
+                                            , "OutKapatmaHatası " + e.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             }
                         }
@@ -285,57 +285,26 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
         buttonYedekle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] depolamaIzni = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(Ayarlar.this, depolamaIzni, requestCodePermissionWrite);
-                }
-                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Ayarlar.this);
-                    builder.setMessage("Tüm kayıtlı veriler yedeklensin mi?");
-                    builder.setPositiveButton("Evet", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Calendar c = Calendar.getInstance();
-                            SimpleDateFormat df2 = new SimpleDateFormat("dd.MM.yyyy kk.mm.ss");
-                            final String tarihBugun = df2.format(c.getTime());
+                AlertDialog.Builder builder = new AlertDialog.Builder(Ayarlar.this);
+                builder.setMessage("Tüm kayıtlı veriler yedeklensin mi?");
+                builder.setPositiveButton("Evet", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Calendar c = Calendar.getInstance();
+                        SimpleDateFormat df2 = new SimpleDateFormat("dd.MM.yyyy kk.mm.ss");
+                        final String tarihBugun = df2.format(c.getTime());
 
-                            yedekle(Ayarlar.this, "Yedek Veli Bilgilendirme  " + tarihBugun);
-                        }
-                    });
-                    builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                } else {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(Ayarlar.this, depolamaIzni[0])) {
-                        ActivityCompat.requestPermissions(Ayarlar.this, depolamaIzni, requestCodePermissionWrite);
-                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(Ayarlar.this);
-                        builder.setTitle("Dikkat!");
-                        builder.setMessage("Yedekleme için eksik izin var. Depolama iznini vermeniz gereklidir. İzin vermek için <Ayarlar>'a tıklayınız ve açılan sayfadaki izinler bölümüden izin veriniz.");
-                        builder.setPositiveButton("Ayarlar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent myAppSettings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getApplicationContext().getPackageName()));
-                                myAppSettings.addCategory(Intent.CATEGORY_DEFAULT);
-                                myAppSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivityForResult(myAppSettings, 35);
-                            }
-                        });
-                        builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
+                        yedekle(Ayarlar.this, "Yedek Veli Bilgilendirme  " + tarihBugun);
                     }
-                }
+                });
+                builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         });
 
@@ -343,34 +312,7 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
         buttonYedektenAl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    dosyaYoneticisiniAc();
-                } else {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(Ayarlar.this, depolamaIzni[0])) {
-                        ActivityCompat.requestPermissions(Ayarlar.this, depolamaIzni, requestCodePermissionRead);
-                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(Ayarlar.this);
-                        builder.setTitle("Dikkat!");
-                        builder.setMessage("Yedekten almak için eksik izin var. Depolama iznini vermeniz gereklidir. İzin vermek için <Ayarlar>'a tıklayınız ve açılan sayfadaki izinler bölümüden izin veriniz.");
-                        builder.setPositiveButton("Ayarlar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent myAppSettings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getApplicationContext().getPackageName()));
-                                myAppSettings.addCategory(Intent.CATEGORY_DEFAULT);
-                                myAppSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivityForResult(myAppSettings, 35);
-                            }
-                        });
-                        builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
-                    }
-                }
+                dosyaYoneticisiniAc();
             }
         });
     }
@@ -549,6 +491,7 @@ public class Ayarlar extends AppCompatActivity implements MenuContentComm {
         menuButtonsVisibilityFirst();
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         androidx.appcompat.app.AlertDialog.Builder builder=new androidx.appcompat.app.AlertDialog.Builder(Ayarlar.this);

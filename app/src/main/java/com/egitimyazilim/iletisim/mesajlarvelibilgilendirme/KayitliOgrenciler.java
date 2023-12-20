@@ -1,5 +1,6 @@
 package com.egitimyazilim.iletisim.mesajlarvelibilgilendirme;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -289,6 +290,7 @@ public class KayitliOgrenciler extends AppCompatActivity implements MenuContentC
         return subeList;
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
        // super.onBackPressed();

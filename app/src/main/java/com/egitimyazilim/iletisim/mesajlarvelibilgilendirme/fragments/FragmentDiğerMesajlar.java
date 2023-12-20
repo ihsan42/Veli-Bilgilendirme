@@ -1,5 +1,7 @@
 package com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments;
 
+import static android.content.Context.RECEIVER_EXPORTED;
+
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Telephony;
@@ -75,15 +78,9 @@ public class FragmentDiğerMesajlar extends Fragment implements LoaderManager.Lo
         listView = (ListView) view.findViewById(R.id.listView);
         textViewSMSyok=(TextView)view.findViewById(R.id.textViewVeliSMSYok2);
 
-        izinlerTamamMi = checkPermission();
-        if (izinlerTamamMi == false) {
-            requestPermissions();
-        } else {
-            mCallbacks=this;
-
-            LoaderManager loaderManager=getLoaderManager();
-            loaderManager.initLoader(1,null,mCallbacks);
-        }
+        mCallbacks=this;
+        LoaderManager loaderManager=getLoaderManager();
+        loaderManager.initLoader(1,null,mCallbacks);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -160,7 +157,11 @@ public class FragmentDiğerMesajlar extends Fragment implements LoaderManager.Lo
             }
         };
 
-        getActivity().registerReceiver(receiver, intentFilter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getActivity().registerReceiver(receiver, intentFilter, RECEIVER_EXPORTED);
+        }else {
+            getActivity().registerReceiver(receiver, intentFilter);
+        }
     }
 
     @Override
@@ -187,77 +188,6 @@ public class FragmentDiğerMesajlar extends Fragment implements LoaderManager.Lo
         startActivityForResult(intent, requestDefaultSmsAppCode);
     }
 
-    private boolean checkPermission() {
-        boolean isPermissionsOk = true;
-
-        String readSMS = Manifest.permission.READ_SMS;
-        String recieveSMS = Manifest.permission.RECEIVE_SMS;
-        String sendSMS = Manifest.permission.SEND_SMS;
-        String recieveMMS = Manifest.permission.RECEIVE_MMS;
-        String readPhoneState = Manifest.permission.READ_PHONE_STATE;
-        String readContacts=Manifest.permission.READ_CONTACTS;
-
-        String[] permissions = {readSMS, recieveSMS, sendSMS, recieveMMS, readPhoneState,readContacts};
-
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
-                isPermissionsOk = false;
-            }
-        }
-        return isPermissionsOk;
-    }
-
-    public void requestPermissions() {
-        String readSMS = Manifest.permission.READ_SMS;
-        String recieveSMS = Manifest.permission.RECEIVE_SMS;
-        String sendSMS = Manifest.permission.SEND_SMS;
-        String recieveMMS = Manifest.permission.RECEIVE_MMS;
-        String readPhoneState = Manifest.permission.READ_PHONE_STATE;
-        String readContacts=Manifest.permission.READ_CONTACTS;
-
-        String[] permissions = {readSMS, recieveSMS, sendSMS, recieveMMS, readPhoneState,readContacts};
-        ActivityCompat.requestPermissions(getActivity(), permissions, requestPermissionsCode);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == requestDefaultSmsAppCode) {
-            varsayılanMi = checkDefaultSMSapp();
-            if (varsayılanMi == false) {
-                Toast.makeText(getActivity(),"Bu bölümden mesaj gönderebilmek bu uygulamanın varsayılan sms uygulaması olması gerekir!",Toast.LENGTH_LONG).show();
-            }
-
-            izinlerTamamMi = checkPermission();
-            if (izinlerTamamMi == false) {
-                requestPermissions();
-            }else{
-                mCallbacks=this;
-
-                LoaderManager loaderManager=getLoaderManager();
-                loaderManager.initLoader(1,null,mCallbacks);
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == requestPermissionsCode) {
-            izinlerTamamMi = checkPermission();
-            if(izinlerTamamMi==true){
-                mCallbacks=this;
-
-                LoaderManager loaderManager=getLoaderManager();
-                loaderManager.initLoader(1,null,mCallbacks);
-            }else{
-                Toast.makeText(getActivity(),"Mesajları görüntüleyebilmek için istenilen izinleri vermeniz gerekir!",Toast.LENGTH_SHORT).show();
-
-            }
-        }
-    }
-
     private List<Chats> getAllSms(Cursor c) {
 
         List<Chats> chatsList1 = new ArrayList<Chats>();
@@ -274,7 +204,7 @@ public class FragmentDiğerMesajlar extends Fragment implements LoaderManager.Lo
                     String num = c.getString(c.getColumnIndexOrThrow("address"));
                     objChats.setSender(num);
                     objChats.setMessage(c.getString(c.getColumnIndexOrThrow("body")));
-                    objChats.setSms_read(c.getString(c.getColumnIndex("read")));
+                    objChats.setSms_read(c.getString(c.getColumnIndexOrThrow("read")));
                     objChats.setTime(c.getLong(c.getColumnIndexOrThrow("date")));
                     if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
                         objChats.setFolder_name("inbox");

@@ -1,5 +1,6 @@
 package com.egitimyazilim.iletisim.mesajlarvelibilgilendirme;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.ActionBar;
@@ -280,6 +281,7 @@ public class YoklamaKayitlari extends AppCompatActivity implements CommYoklama, 
         menuButtonsVisibilityFirst();
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder=new AlertDialog.Builder(YoklamaKayitlari.this);

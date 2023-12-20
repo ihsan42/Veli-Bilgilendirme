@@ -1,5 +1,6 @@
 package com.egitimyazilim.iletisim.mesajlarvelibilgilendirme;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -63,7 +65,8 @@ public class HazirMesajlarim extends AppCompatActivity implements MenuContentCom
             }
         });
 
-        final EditText editTextHazirMesajim=(EditText)findViewById(R.id.editTextHazirMesajim);
+        final EditText editTextHazirMesajim1=(EditText)findViewById(R.id.editTextHazirMesajim1);
+        final EditText editTextHazirMesajim2=(EditText)findViewById(R.id.editTextHazirMesajim2);
         listViewKayitliMesajlar=(ListView)findViewById(R.id.listViewKayitliMesajlarim);
         Button buttonKaydet=(Button)findViewById(R.id.buttonMesajiKaydet);
 
@@ -78,13 +81,33 @@ public class HazirMesajlarim extends AppCompatActivity implements MenuContentCom
                 builder.setPositiveButton("Sil", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(editTextHazirMesajim.getText().toString().equals(kayitliMesajlarim.get(position))){
-                            editTextHazirMesajim.setText("");
+                        if(kayitliMesajlarim.get(position).contains(" <ad-soyad> ")){
+                            String hazirmesajim1=kayitliMesajlarim.get(position).split(" <ad-soyad> ")[0];
+                            String hazirmesajim2=kayitliMesajlarim.get(position).split(" <ad-soyad> ")[1];
+
+                            if(editTextHazirMesajim1.getText().toString().equals(hazirmesajim1) && editTextHazirMesajim2.getText().toString().equals(hazirmesajim2)){
+                                editTextHazirMesajim1.setText("");
+                                editTextHazirMesajim2.setText("");
+                            }
                         }
+
+
                         Veritabani vt= new Veritabani(getApplicationContext());
-                        vt.hazirMesajSil(kayitliMesajlarim.get(position));
-                        Toast.makeText(getApplicationContext(),"Silindi!",Toast.LENGTH_SHORT).show();
-                        listele();
+                        String mesaj=kayitliMesajlarim.get(position);
+                        if(mesaj.contains("'")){
+                            mesaj=mesaj.replaceAll("'","/");
+                        }
+
+                        if(mesaj.contains("\"")){
+                            mesaj=mesaj.replaceAll("\"","//");
+                        }
+                        long id=vt.hazirMesajSil(mesaj);
+                        if(id<0){
+                            Toast.makeText(getApplicationContext(),"Hata! Silinemedi!",Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(getApplicationContext(),"Silindi!",Toast.LENGTH_SHORT).show();
+                            listele();
+                        }
                     }
                 });
                 builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
@@ -102,32 +125,47 @@ public class HazirMesajlarim extends AppCompatActivity implements MenuContentCom
         listViewKayitliMesajlar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*AlertDialog.Builder builder2=new AlertDialog.Builder(HazirMesajlarim.this);
-                builder2.setMessage(kayitliMesajlarim.get(position));
-                AlertDialog alertDialog2=builder2.create();
-                alertDialog2.show();*/
-                editTextHazirMesajim.setText(kayitliMesajlarim.get(position));
+                if(kayitliMesajlarim.get(position).contains(" <ad-soyad> ")){
+                    String hazirmesajim1=kayitliMesajlarim.get(position).split(" <ad-soyad> ")[0];
+                    String hazirmesajim2=kayitliMesajlarim.get(position).split(" <ad-soyad> ")[1];
+                    editTextHazirMesajim1.setText(hazirmesajim1);
+                    editTextHazirMesajim2.setText(hazirmesajim2);
+                }else{
+                    editTextHazirMesajim2.setText(kayitliMesajlarim.get(position));
+                }
             }
         });
 
         buttonKaydet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String hazirmesajim="";
-                hazirmesajim=editTextHazirMesajim.getText().toString().trim();
+                String hazirmesajim1="";
+                String hazirmesajim2="";
+                hazirmesajim1=editTextHazirMesajim1.getText().toString().trim();
+                hazirmesajim2=editTextHazirMesajim2.getText().toString().trim();
 
-                if(hazirmesajim.equals("")){
+                String tamMesajim=hazirmesajim1+" <ad-soyad> "+hazirmesajim2;
+
+                if(tamMesajim.length()<=12){
                     Toast.makeText(getApplicationContext(),"Lütfen mesaj yazınız!",Toast.LENGTH_SHORT).show();
                 }else{
                     Veritabani vt=new Veritabani(getApplicationContext());
-                    if(kayitliMesajlarim.contains(hazirmesajim)){
+                    if(kayitliMesajlarim.contains(tamMesajim)){
                         Toast.makeText(getApplicationContext(),"Bu mesaj zaten kayıtlı",Toast.LENGTH_SHORT).show();
                     }else{
-                        long id=vt.hazirMesajKaydet(hazirmesajim);
+                        if(tamMesajim.contains("'")){
+                            tamMesajim=tamMesajim.replaceAll("'","/");
+                        }
+                        if(tamMesajim.contains("\"")){
+                            tamMesajim=tamMesajim.replaceAll("\"","//");
+                        }
+
+                        long id=vt.hazirMesajKaydet(tamMesajim);
                         if(id>0){
                             listele();
                             hideKeyboard(HazirMesajlarim.this);
-                            editTextHazirMesajim.setText("");
+                            editTextHazirMesajim1.setText("");
+                            editTextHazirMesajim2.setText("");
                             Toast.makeText(getApplicationContext(),"Hazır mesaj kaydedildi.",Toast.LENGTH_SHORT).show();
                         }else {
                             Toast.makeText(getApplicationContext(),"Hazır mesaj kaydedilirken hata oluştu!",Toast.LENGTH_SHORT).show();
@@ -176,6 +214,7 @@ public class HazirMesajlarim extends AppCompatActivity implements MenuContentCom
         menuButtonsVisibilityFirst();
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         androidx.appcompat.app.AlertDialog.Builder builder=new androidx.appcompat.app.AlertDialog.Builder(HazirMesajlarim.this);

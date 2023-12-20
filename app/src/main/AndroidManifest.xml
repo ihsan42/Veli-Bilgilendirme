@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.egitimyazilim.iletisim.mesajlarvelibilgilendirme">
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="true" />
 
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.WRITE_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_MMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
@@ -37,8 +39,7 @@
             android:name=".messagerecieve.MMSBroadcastReceiver"
             android:permission="android.permission.BROADCAST_WAP_PUSH"
             android:exported="true"
-            tools:ignore="ExtraText">
-            tools:ignore="IntentFilterExportedReceiver">
+            tools:ignore="ExtraText||IntentFilterExportedReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER" />
 
@@ -83,20 +84,17 @@
             android:name=".MesajKutusu"
             android:configChanges="orientation|screenSize"
             android:exported="true">
-            android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name=".ExceldenListeAl"
             android:configChanges="orientation|screenSize"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".Siniflar"
             android:configChanges="orientation|screenSize"
             android:exported="true"
             tools:ignore="ExtraText">
-            android:theme="@style/AppTheme">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -106,49 +104,43 @@
         <activity
             android:name=".OgrenciListesi"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme"
-            android:exported="true"
+            android:exported="false"
             android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".YoklamaKayitlari"
             android:configChanges="orientation|screenSize"
-            android:exported="true"
-            android:theme="@style/AppTheme" >
+            android:exported="false">
         </activity>
         <activity
             android:name=".KayitliOgrenciler"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme"
-            android:exported="true"
+            android:exported="false"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".Ayarlar"
             android:configChanges="orientation|screenSize"
-            android:exported="true"
-            android:theme="@style/AppTheme" />
+            android:exported="false" />
         <activity
             android:name=".KisiselBilgiler"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="fullSensor"
-            android:exported="true"
-            android:theme="@style/AppTheme"
+            android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".HazirMesajlarim"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme"
-            android:exported="true"
+            android:exported="false"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".Yazililar"
-            android:exported="true"
+            android:exported="false"
             android:configChanges="orientation|screenSize" >
         </activity>
 
         <activity
             android:name=".YardimciVideolar"
-            android:exported="true"
+            android:exported="false"
             android:configChanges="orientation|screenSize" >
         </activity>
     </application>

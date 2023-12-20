@@ -16,44 +16,58 @@
         android:gravity="center"
         android:text="Hazır Mesajlarım" />
 
-    <TextView
-        android:id="@+id/textView8"
+    <EditText
+        android:id="@+id/editTextHazirMesajim1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_below="@id/textView"
-        android:text='"Okul adı" öğrencilerinden "Öğrenci adı-soyadı"...'
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true"
+        android:ems="10"
+        android:hint="Ad-Soyad'dan önceki mesajı buraya yazınız."
+        android:inputType="textMultiLine" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextHazirMesajim1"
+        android:text='"Öğrenci adı-soyadı"'
+        android:layout_centerHorizontal="true"
         android:textColor="@color/colorRed"
         android:background="@color/colorMyLightGreen"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/editTextHazirMesajim"
+        android:id="@+id/editTextHazirMesajim2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView8"
         android:layout_alignParentStart="true"
         android:ems="10"
-        android:hint="Mesajın devamını buraya yazınız..."
+        android:hint="Ad-Soyad'dan sonraki mesajı buraya yazınız."
         android:inputType="textMultiLine" />
 
     <Button
         android:id="@+id/buttonMesajiKaydet"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextHazirMesajim"
-        android:layout_margin="5dp"
+        android:layout_below="@+id/editTextHazirMesajim2"
         android:background="@color/colorPrimary"
-        android:textColor="@color/colorTitleText"
-        android:text="Mesajı Kaydet" />
+        android:layout_centerHorizontal="true"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp"
+        android:text="Mesajı Kaydet"
+        android:textColor="@color/colorTitleText" />
 
     <ListView
+        android:background="@color/colorAccentLight"
         android:id="@+id/listViewKayitliMesajlarim"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/textView13"
-android:layout_marginBottom="@dimen/toolbar_size"        android:layout_alignParentStart="true" />
+        android:layout_above="@id/toolbar"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/textView13"
@@ -65,6 +79,7 @@ android:layout_marginBottom="@dimen/toolbar_size"        android:layout_alignPar
         android:layout_below="@+id/buttonMesajiKaydet"
         android:text="Kayıtlı Hazır Mesajlarım"
         android:textColor="@android:color/black"
+        android:background="@color/colorAccent"
         android:textStyle="bold" />
 
     <fragment
@@ -77,6 +92,7 @@ android:layout_marginBottom="@dimen/toolbar_size"        android:layout_alignPar
         android:layout_marginBottom="@dimen/toolbar_size"/>
 
     <include
+        android:id="@+id/toolbar"
         layout="@layout/menu_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_size"

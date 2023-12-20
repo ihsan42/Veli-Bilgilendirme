@@ -1,5 +1,6 @@
 package com.egitimyazilim.iletisim.mesajlarvelibilgilendirme;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -214,6 +215,7 @@ public class KisiselBilgiler extends AppCompatActivity implements MenuContentCom
         menuButtonsVisibilityFirst();
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         androidx.appcompat.app.AlertDialog.Builder builder=new androidx.appcompat.app.AlertDialog.Builder(KisiselBilgiler.this);

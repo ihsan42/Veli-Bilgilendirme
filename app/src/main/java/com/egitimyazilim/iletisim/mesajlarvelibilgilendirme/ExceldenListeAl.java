@@ -1,6 +1,5 @@
 package com.egitimyazilim.iletisim.mesajlarvelibilgilendirme;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,13 +8,8 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.provider.Settings;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -36,27 +30,18 @@ import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.AdapterForP
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments.MenuContentFragment;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.MenuContentComm;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
-
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExceldenListeAl extends AppCompatActivity implements MenuContentComm {
-
-    private static final int requestCodePermissionRead = 1990;
     private static final int FILE_SELECT_CODE = 55;
     FragmentManager fm;
     Button buttonMenuOpen;
@@ -101,74 +86,13 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
         listView = (ListView) findViewById(R.id.listViewExceldenAl);
         editTextSinifAdi = (EditText) findViewById(R.id.editTextExceldenSinifAdi);
 
-        final String[] depolamaIzni = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(ExceldenListeAl.this, depolamaIzni, requestCodePermissionRead);
-        }
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            showFileChooser();
-        } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(ExceldenListeAl.this, depolamaIzni[0])) {
-                ActivityCompat.requestPermissions(ExceldenListeAl.this, depolamaIzni, requestCodePermissionRead);
-            } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ExceldenListeAl.this);
-                builder.setTitle("Dikkat!");
-                builder.setMessage("Cihazınızdaki Excel dosyasını okuyabilmek için eksik izin var. Depolama iznini vermeniz gereklidir. İzin vermek için <Ayarlar>'a tıklayınız ve açılan sayfadaki izinler bölümüden izin veriniz.");
-                builder.setPositiveButton("Ayarlar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent myAppSettings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getApplicationContext().getPackageName()));
-                        myAppSettings.addCategory(Intent.CATEGORY_DEFAULT);
-                        myAppSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivityForResult(myAppSettings, 35);
-                    }
-                });
-                builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }
-        }
+         showFileChooser();
 
         Button buttonSec = (Button) findViewById(R.id.buttonExceldenSec);
         buttonSec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(ExceldenListeAl.this, depolamaIzni, requestCodePermissionRead);
-                }
-                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    showFileChooser();
-                } else {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(ExceldenListeAl.this, depolamaIzni[0])) {
-                        ActivityCompat.requestPermissions(ExceldenListeAl.this, depolamaIzni, requestCodePermissionRead);
-                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ExceldenListeAl.this);
-                        builder.setTitle("Dikkat!");
-                        builder.setMessage("Cihazınızdaki Excel dosyasını okuyabilmek için eksik izin var. Depolama iznini vermeniz gereklidir. İzin vermek için <Ayarlar>'a tıklayınız ve açılan sayfadaki izinler bölümüden izin veriniz.");
-                        builder.setPositiveButton("Ayarlar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent myAppSettings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getApplicationContext().getPackageName()));
-                                myAppSettings.addCategory(Intent.CATEGORY_DEFAULT);
-                                myAppSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivityForResult(myAppSettings, 35);
-                            }
-                        });
-                        builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
-                    }
-                }
+             showFileChooser();
             }
         });
 
@@ -437,7 +361,7 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
             try {
                 inputStream = getContentResolver().openInputStream(fileUri);
                 workbook = WorkbookFactory.create(inputStream);
-            } catch (IOException | InvalidFormatException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             Sheet sheet = workbook.getSheetAt(0);
@@ -447,12 +371,12 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
                 Cell cell = sheet.getRow(0).getCell(0);
                 if (cell != null) {
                     switch (cell.getCellType()) {
-                        case Cell.CELL_TYPE_NUMERIC:
+                        case NUMERIC:
                             if (String.valueOf(cell.getNumericCellValue()).equals(siraNo)) {
                                 eOkulOrtaOkuldanMi = true;
                             }
                             break;
-                        case Cell.CELL_TYPE_STRING:
+                        case STRING:
                             if (cell.getStringCellValue().equals(siraNo)) {
                                 eOkulOrtaOkuldanMi = true;
                             }
@@ -465,12 +389,12 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
                     cell = sheet.getRow(3).getCell(0);
                     if (cell != null) {
                         switch (cell.getCellType()) {
-                            case Cell.CELL_TYPE_NUMERIC:
+                            case NUMERIC:
                                 if (String.valueOf(cell.getNumericCellValue()).equals(siraNo)) {
                                     eOkulLisedenMi = true;
                                 }
                                 break;
-                            case Cell.CELL_TYPE_STRING:
+                            case STRING:
                                 if (cell.getStringCellValue().equals(siraNo)) {
                                     eOkulLisedenMi = true;
                                 }
@@ -484,12 +408,12 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
                 cell = sheet.getRow(0).getCell(1);
                 if (cell != null) {
                     switch (cell.getCellType()) {
-                        case Cell.CELL_TYPE_NUMERIC:
+                        case NUMERIC:
                             if (String.valueOf(cell.getNumericCellValue()).equals(ogrenciNo)) {
                                 taslaktanMi = true;
                             }
                             break;
-                        case Cell.CELL_TYPE_STRING:
+                        case STRING:
                             if (cell.getStringCellValue().equals(ogrenciNo)) {
                                 taslaktanMi = true;
                             }
@@ -528,10 +452,10 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
                             Cell ogrNoCell = row.getCell(1);
                             if (ogrNoCell != null) {
                                 switch (ogrNoCell.getCellType()) {
-                                    case Cell.CELL_TYPE_NUMERIC:
+                                    case NUMERIC:
                                         ogrenci.setOkulno(String.valueOf(Math.round(ogrNoCell.getNumericCellValue())));
                                         break;
-                                    case Cell.CELL_TYPE_STRING:
+                                    case STRING:
                                         ogrenci.setOkulno(ogrNoCell.getStringCellValue().trim());
                                         break;
                                 }
@@ -567,10 +491,10 @@ public class ExceldenListeAl extends AppCompatActivity implements MenuContentCom
 
                                 if(telNo!=null){
                                     switch (telNo.getCellType()) {
-                                        case Cell.CELL_TYPE_NUMERIC:
+                                        case NUMERIC:
                                             tel = String.valueOf(Math.round(telNo.getNumericCellValue()));
                                             break;
-                                        case Cell.CELL_TYPE_STRING:
+                                        case STRING:
                                             tel = telNo.getStringCellValue().trim();
                                             break;
                                     }

@@ -36,7 +36,7 @@ public class SMSGonder {
     public static void gonder(Context context, SmsManager smsManager, String telno, String mesaj, String ogrenciAdSoyad) {
         int flag = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            flag = PendingIntent.FLAG_MUTABLE;
+            flag = PendingIntent.FLAG_IMMUTABLE;
         }
 
         ArrayList<PendingIntent> sentIntents = new ArrayList<>();

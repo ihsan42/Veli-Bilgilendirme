@@ -1,21 +1,13 @@
 package com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+
 import android.Manifest;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.provider.Telephony;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.DialogFragment;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
 import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,12 +17,20 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
+
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.R;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.SMSGonder;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.Veritabani;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.AdapterForYokamaSilme;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.interfaces.CommYoklama;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.utils.Izinler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,6 @@ public class YoklamaGecmisi extends DialogFragment {
     Button buttonVeliBilgilendir;
     String gelenAdAsoyad;
     String gelenTelNo;
-    boolean izinVarMi=false;
     private static final int requestCodePermission=111;
     String[] izinler={Manifest.permission.SEND_SMS,Manifest.permission.READ_PHONE_STATE};
 
@@ -74,17 +73,6 @@ public class YoklamaGecmisi extends DialogFragment {
         }
     }
 
-    public boolean checkPermission(Context context, String[] permissions) {
-        boolean isPermissionsOk = true;
-
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                isPermissionsOk = false;
-            }
-        }
-        return isPermissionsOk;
-    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -97,100 +85,95 @@ public class YoklamaGecmisi extends DialogFragment {
         checkBoxSelectAny=(CheckBox)view.findViewById(R.id.checkSelectAny);
         textViewBilgi=(TextView)view.findViewById(R.id.textViewBilgi);
 
-        izinVarMi=checkPermission(getActivity(),izinler);
-        if(izinVarMi==false){
-            ActivityCompat.requestPermissions(getActivity(), izinler, requestCodePermission);
-        }
+        ActivityCompat.requestPermissions(getActivity(), izinler, requestCodePermission);
 
         buttonVeliBilgilendir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(yoklamaList.size()==0){
+                if (!Izinler.checkPermission(getActivity(), izinler)) {
+                    Izinler.showRequestPermissionDialog(getActivity(),izinler,requestCodePermission);
+                } else if(yoklamaList.size()==0){
                     Toast.makeText(getActivity(),"Kayıt Yok!",Toast.LENGTH_SHORT).show();
-                }else{
-                    secilenler=new ArrayList<>();
-                    for(Ogrenci ogrenci:adapterForYokamaSilme.ogrenciList){
-                        if(ogrenci.getChecked()==true){
+                }else {
+                    secilenler = new ArrayList<>();
+                    for (Ogrenci ogrenci : adapterForYokamaSilme.ogrenciList) {
+                        if (ogrenci.getChecked() == true) {
                             secilenler.add(ogrenci);
                         }
                     }
 
-                    if(secilenler.size()==0){
-                        Toast.makeText(getActivity(),"Seçilen Yok!",Toast.LENGTH_SHORT).show();
+                    if (secilenler.size() == 0) {
+                        Toast.makeText(getActivity(), "Seçilen Yok!", Toast.LENGTH_SHORT).show();
 
-                    }else if(izinVarMi==false){
-                        List<Integer> birDahaSormaSayisi = new ArrayList<>();
-                        for (String izin : izinler) {
-                            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), izin)) {
-                                birDahaSormaSayisi.add(1);
-                                ActivityCompat.requestPermissions(getActivity(), new String[]{izin}, requestCodePermission);
-                            }
-                        }
-                        if (birDahaSormaSayisi.size()==0) {
-                            AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-                            builder.setTitle("Dikkat!");
-                            builder.setMessage("Sms gönderebilmek için eksik izinler var. SMS ve Telefon izinlerinin ikisini de vermeniz gereklidir. İzinleri tamamlamak için <Ayarlar>'a tıklayınız ve açılan sayfadaki izinler bölümüden bu izinlerden eksik olanına izin veriniz.");
-                            builder.setPositiveButton("Ayarlar", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent myAppSettings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getActivity().getPackageName()));
-                                    myAppSettings.addCategory(Intent.CATEGORY_DEFAULT);
-                                    myAppSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivityForResult(myAppSettings, 35);
-                                }
-                            });
-                            builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                            AlertDialog alertDialog=builder.create();
-                            alertDialog.show();
-                        }
-                    }else{
-                        tarihler="";
-                        String y="yok";
-                        String g="geç";
-                        String r="raporlu";
-                        String i="izinli";
-                        for(Ogrenci ogrenci1:secilenler){
-                            if(ogrenci1.getDurum().equals(y)){
-                                if(ogrenci1.getSinif().contains("(Kurs)")){
-                                    tarihler+=ogrenci1.getTarih()+" tarihinde kursa gelmedi."+"\n";
-                                }else{
-                                    tarihler+=ogrenci1.getTarih()+" tarihinde okula gelmedi."+"\n";
+                    } else {
+                        tarihler = "";
+                        String y = "yok";
+                        String g = "geç";
+                        String r = "raporlu";
+                        String i = "izinli";
+                        for (Ogrenci ogrenci1 : secilenler) {
+                            if (ogrenci1.getDurum().equals(y)) {
+                                if (ogrenci1.getSinif().contains("(Kurs)")) {
+                                    tarihler += ogrenci1.getTarih() + " tarihinde kursa gelmedi." + "\n";
+                                } else {
+                                    tarihler += ogrenci1.getTarih() + " tarihinde okula gelmedi." + "\n";
                                 }
                             }
-                            if(ogrenci1.getDurum().equals(g)){
-                                if(ogrenci1.getSinif().contains("(Kurs)")){
-                                    tarihler+=ogrenci1.getTarih()+" tarihinde kursa geç geldi."+"\n";
-                                }else{
-                                    tarihler+=ogrenci1.getTarih()+" tarihinde okula geç geldi."+"\n";
+                            if (ogrenci1.getDurum().equals(g)) {
+                                if (ogrenci1.getSinif().contains("(Kurs)")) {
+                                    tarihler += ogrenci1.getTarih() + " tarihinde kursa geç geldi." + "\n";
+                                } else {
+                                    tarihler += ogrenci1.getTarih() + " tarihinde okula geç geldi." + "\n";
                                 }
                             }
-                            if(ogrenci1.getDurum().equals(r)){
-                                tarihler+=ogrenci1.getTarih()+" tarihinde raporludur."+"\n";
+                            if (ogrenci1.getDurum().equals(r)) {
+                                tarihler += ogrenci1.getTarih() + " tarihinde raporludur." + "\n";
                             }
-                            if(ogrenci1.getDurum().equals(i)){
-                                if(ogrenci1.getSinif().contains("(Kurs)")){
-                                    tarihler+=ogrenci1.getTarih()+" tarihinde kurs için izinlidir."+"\n";
-                                }else{
-                                    tarihler+=ogrenci1.getTarih()+" tarihinde izinlidir."+"\n";
+                            if (ogrenci1.getDurum().equals(i)) {
+                                if (ogrenci1.getSinif().contains("(Kurs)")) {
+                                    tarihler += ogrenci1.getTarih() + " tarihinde kurs için izinlidir." + "\n";
+                                } else {
+                                    tarihler += ogrenci1.getTarih() + " tarihinde izinlidir." + "\n";
                                 }
                             }
                         }
-                        SmsManager[] smsManager={SmsManager.getDefault()};
+                        SmsManager[] smsManager = {SmsManager.getDefault()};
 
-                        AlertDialog.Builder builder1=new AlertDialog.Builder(getActivity());
+                        SharedPreferences sharedPref = getActivity().getSharedPreferences("Kisisel Ayarlar", MODE_PRIVATE);
+                        boolean durumIsim = sharedPref.getBoolean("isim", false);
+                        boolean durumBrans = sharedPref.getBoolean("brans", false);
+                        boolean durumOkuladi = sharedPref.getBoolean("okuladi", false);
+                        Veritabani vt = new Veritabani(getActivity());
+                        List<String> kisiselBilgiler = new ArrayList<>();
+                        kisiselBilgiler = vt.kisiselBilgileriGetir();
+
+                        String mesaj="";
+                        if (durumIsim == true && durumBrans == true && durumOkuladi == true) {
+                            mesaj = kisiselBilgiler.get(2) + " öğrencilerinden " + gelenAdAsoyad +" "+tarihler+" [" + kisiselBilgiler.get(0) + " (" + kisiselBilgiler.get(1) + " öğretmeni)]";
+                        } else if (durumIsim == true && durumBrans == true && durumOkuladi == false) {
+                            mesaj = "Okulumuz öğrencilerinden " + gelenAdAsoyad + " "+tarihler +" [" + kisiselBilgiler.get(0) + " (" + kisiselBilgiler.get(1) + " öğretmeni)]";
+                        } else if (durumIsim == true && durumBrans == false && durumOkuladi == true) {
+                            mesaj = kisiselBilgiler.get(2) + " öğrencilerinden " + gelenAdAsoyad +" "+tarihler+ " [" + kisiselBilgiler.get(0) + "]";
+                        } else if (durumIsim == true && durumBrans == false && durumOkuladi == false) {
+                            mesaj = "Okulumuz öğrencilerinden " + gelenAdAsoyad +" "+tarihler+ " [" + kisiselBilgiler.get(0) + "]";
+                        } else if (durumIsim == false && durumBrans == true && durumOkuladi == true) {
+                            mesaj = kisiselBilgiler.get(2) + " öğrencilerinden " + gelenAdAsoyad +" "+tarihler+ " (" + kisiselBilgiler.get(1) + " öğretmeni)";
+                        } else if (durumIsim == false && durumBrans == true && durumOkuladi == false) {
+                            mesaj = "Okulumuz öğrencilerinden " + gelenAdAsoyad +" "+tarihler+ " (" + kisiselBilgiler.get(1) + " öğretmeni)";
+                        } else if (durumIsim == false && durumBrans == false && durumOkuladi == true) {
+                            mesaj = kisiselBilgiler.get(2) + " öğrencilerinden " + gelenAdAsoyad +" "+ tarihler;
+                        } else if (durumIsim == false && durumBrans == false && durumOkuladi == false) {
+                            mesaj = "Okulumuz öğrencilerinden " + gelenAdAsoyad +" "+tarihler;
+                        }
+
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
                         builder1.setTitle("SMS gönderilsin mi?");
-                        builder1.setMessage("Okulumuz öğrencilerinden "+gelenAdAsoyad+"\n"+tarihler);
+                        builder1.setMessage(mesaj);
+                        String finalMesaj = mesaj;
                         builder1.setPositiveButton("Gönder", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                final String mesaj="Okulumuz öğrencilerinden "+gelenAdAsoyad+"\n"+tarihler;
-
-                                SMSGonder.gonder(getActivity(),smsManager[0],gelenTelNo,mesaj,gelenAdAsoyad);
+                                SMSGonder.gonder(getActivity(), smsManager[0], gelenTelNo, finalMesaj, gelenAdAsoyad);
                                 dialog.dismiss();
                             }
                         });
@@ -200,11 +183,11 @@ public class YoklamaGecmisi extends DialogFragment {
                                 dialog.dismiss();
                             }
                         });
-                        AlertDialog alertDialog=builder1.create();
+                        AlertDialog alertDialog = builder1.create();
                         alertDialog.show();
 
-                        if(SMSGonder.isDualSimAvailable(getActivity())){
-                            SMSGonder.getDefaultSMSManeger(getActivity(),smsManager);
+                        if (SMSGonder.isDualSimAvailable(getActivity())) {
+                            SMSGonder.getDefaultSMSManeger(getActivity(), smsManager);
                         }
                     }
                 }
@@ -271,10 +254,15 @@ public class YoklamaGecmisi extends DialogFragment {
                                 for(Ogrenci ogrenci:secilenler){
                                     if(ogrenci.getChecked()==true){
                                         Veritabani vt=new Veritabani(getActivity());
-                                        vt.ogrenciYoklamaSil(gelenSinifAdi,gelenOkulNo,ogrenci.getTarih());
+                                        long id=vt.ogrenciYoklamaSil(gelenSinifAdi,gelenOkulNo,ogrenci.getTarih());
+                                        if (id>-1){
+                                            Toast.makeText(getActivity(),ogrenci.getTarih()+" silindi",Toast.LENGTH_SHORT).show();
+                                        }else{
+                                            Toast.makeText(getActivity(),"Hata! "+ogrenci.getTarih()+" silinemedi",Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 }
-                                Toast.makeText(getActivity(),"Silindi",Toast.LENGTH_SHORT).show();
+
                                 CommYoklama commYoklama=(CommYoklama)getActivity();
                                 commYoklama.yoklamaKayitSilmeOk();
                                 dismiss();
@@ -320,19 +308,5 @@ public class YoklamaGecmisi extends DialogFragment {
         this.gelenOkulNo=okulno;
         this.gelenAdAsoyad=adsoyad;
         this.gelenTelNo=telno;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==requestCodePermission){
-            izinVarMi=checkPermission(getActivity(),izinler);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        izinVarMi=checkPermission(getActivity(),izinler);
     }
 }

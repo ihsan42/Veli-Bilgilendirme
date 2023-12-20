@@ -36,6 +36,7 @@ import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.adapters.AdaptorForC
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.contentprovider.MessagesContentProviderHandler;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Chats;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.utils.ContentContract;
+import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.utils.Izinler;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,7 +53,6 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
     AdaptorForChatPersonMessages adaptorForChatPersonMessages;
     List<Long> dates=new ArrayList<>();
     boolean varsayilanMi=false;
-    boolean izinlerTamamMi=false;
     RecyclerView recyclerView;
     EditText editTextMesaj;
     // EditText editTextAlici;
@@ -98,8 +98,7 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
         if(nerdengeldi!=null&&nerdengeldi.equals("listedengelen")){
             editTextAlici.setEnabled(false);
         }*/
-        varsayilanMi = checkDefaultSMSapp();
-        izinlerTamamMi = checkPermission();
+       // varsayilanMi = checkDefaultSMSapp();
 
         char[] chars = kisiTel.toCharArray();
 
@@ -124,33 +123,35 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
         }*/
 
         // editTextAlici.setText(kisiTel);
-        if (izinlerTamamMi == true) {
+       // if (izinlerTamamMi == true) {
             mCallbacks = this;
             LoaderManager loaderManager = getSupportLoaderManager();
             loaderManager.initLoader(1, null, mCallbacks);
-        }
+       // }
 
 
         buttonGonder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (izinlerTamamMi == true) {
+                String[] izinler={Manifest.permission.SEND_SMS,Manifest.permission.READ_PHONE_STATE};
+
+                if (!Izinler.checkPermission(getApplicationContext(), izinler)) {
+                    Izinler.showRequestPermissionDialog(ComposeSmsActivity.this,izinler,requestPermissionsCode);
+                } else {
                     sendMySMS();
                     sendStatusTextView.setText("");
-                } else {
-                    Toast.makeText(getApplicationContext(), "Sms gönderebilmeniz için eksik izinler var! Lütfen uygulama izinlerini kontrol ediniz.", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //varsayilanMi=checkDefaultSMSapp();
-       // if (varsayilanMi == false) {
-       //     Toast.makeText(getApplicationContext(),"Mesaj gönderebilmek için bu uygulamanın varsayılan sms uygulaması olması gerekir!",Toast.LENGTH_LONG).show();
-       // }else{
+        varsayilanMi=checkDefaultSMSapp();
+        if (varsayilanMi == false) {
+            Toast.makeText(getApplicationContext(),"Mesaj gönderebilmek için bu uygulamanın varsayılan sms uygulaması olması gerekir!",Toast.LENGTH_LONG).show();
+        }else{
             izinlerTamamMi = checkPermission();
             if(izinlerTamamMi==true){
                 mCallbacks=this;
@@ -160,24 +161,7 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
             }else{
                 Toast.makeText(getApplicationContext(),"Mesajları görüntüleyebilmek için istenilen izinleri vermeniz gerekir!",Toast.LENGTH_LONG).show();
             }
-        }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == requestPermissionsCode) {
-            izinlerTamamMi = checkPermission();
-            if(izinlerTamamMi==true){
-                mCallbacks=this;
-
-                LoaderManager loaderManager=getSupportLoaderManager();
-                loaderManager.initLoader(1,null,mCallbacks);
-            }else{
-                Toast.makeText(getApplicationContext(),"Mesajları görüntüleyebilmek için istenilen izinleri vermeniz gerekir!",Toast.LENGTH_LONG).show();
-            }
-        }
-    }
+        }*/
 
     private List<Chats> getAllSms(Cursor c) {
         List<Chats> chatsList = new ArrayList<Chats>();
@@ -257,8 +241,18 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
                 sendStatusTextView.setText(s);
             }
         };
-        registerReceiver(sentStatusReceiver, new IntentFilter("SMS_SENT"));
-        registerReceiver(deliveredStatusReceiver, new IntentFilter("SMS_DELIVERED"));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(sentStatusReceiver,  new IntentFilter("SMS_SENT"), RECEIVER_EXPORTED);
+        }else {
+            registerReceiver(sentStatusReceiver,  new IntentFilter("SMS_SENT"));
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(deliveredStatusReceiver, new IntentFilter("SMS_DELIVERED"), RECEIVER_EXPORTED);
+        }else {
+            registerReceiver(deliveredStatusReceiver, new IntentFilter("SMS_DELIVERED"));
+        }
     }
 
     @Override
@@ -333,24 +327,6 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
             isDefault = true;
         }
         return isDefault;
-    }
-    private boolean checkPermission() {
-        boolean isPermissionsOk = true;
-
-        String readSMS = Manifest.permission.READ_SMS;
-        String recieveSMS = Manifest.permission.RECEIVE_SMS;
-        String sendSMS = Manifest.permission.SEND_SMS;
-        String recieveMMS = Manifest.permission.RECEIVE_MMS;
-        String readPhoneState = Manifest.permission.READ_PHONE_STATE;
-
-        String[] permissions = {readSMS, recieveSMS, sendSMS, recieveMMS, readPhoneState};
-
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(getApplicationContext(), permission) != PackageManager.PERMISSION_GRANTED) {
-                isPermissionsOk=false;
-            }
-        }
-        return isPermissionsOk;
     }
 
     @NonNull

@@ -3,6 +3,7 @@ package com.egitimyazilim.iletisim.mesajlarvelibilgilendirme;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -10,7 +11,10 @@ import android.util.Log;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.Ogrenci;
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.object_classes.OgrenciForYazili;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Veritabani extends SQLiteOpenHelper {
@@ -197,10 +201,16 @@ public class Veritabani extends SQLiteOpenHelper {
         return id;
     }
 
-    public void hazirMesajSil(String mesajim){
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM "+tablo_adi_hazir_mesajlarim+" WHERE mesaj='"+mesajim+"'");
-        db.close();
+    public long hazirMesajSil(String mesajim){
+        try{
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL("DELETE FROM "+tablo_adi_hazir_mesajlarim+" WHERE mesaj='"+mesajim+"'");
+            db.close();
+        }catch (SQLException e){
+            Log.e("HazirMesajSil",e.getMessage());
+            return -1;
+        }
+       return 1;
     }
 
     public List<String> hazirMesajlarimiGetir(){
@@ -216,6 +226,14 @@ public class Veritabani extends SQLiteOpenHelper {
         try {
             while (c.moveToNext()){
                 hazirmesajim=c.getString(siraNoMesaj);
+
+                if(hazirmesajim.contains("/")){
+                    hazirmesajim=hazirmesajim.replaceAll("/","'");
+                }
+
+                if(hazirmesajim.contains("//")){
+                    hazirmesajim=hazirmesajim.replaceAll("//","\"");
+                }
                 hazirMesajlarim.add(hazirmesajim);
             }
         }
@@ -312,10 +330,24 @@ public class Veritabani extends SQLiteOpenHelper {
         return id;
     }
 
-    public void ogrenciYoklamaSil(String sinif, String ogrNo, String kayittarihi) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM "+tablo_adi_yoklama_kayitlari+" WHERE sinifadi='"+sinif+"' and okulno='"+ogrNo+"' and tarih='"+kayittarihi+"'");
-        db.close();
+    public long ogrenciYoklamaSil(String sinif, String ogrNo, String kayittarihi) {
+        try {
+            Date date=new SimpleDateFormat("dd.MM.yyyy").parse(kayittarihi);
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL("DELETE FROM "+tablo_adi_yoklama_kayitlari+" " +
+                    "WHERE sinifadi='"+sinif+"' " +
+                    "and okulno='"+ogrNo+"' " +
+                    "and tarih='"+ new SimpleDateFormat("yyyy-MM-dd").format(date)+"'");
+            db.close();
+
+            return 0;
+        } catch (ParseException e) {
+            Log.e("YoklamaKayitSil",e.getLocalizedMessage());
+            return -1;
+        }
+
+
     }
 
     public long yoklamaKaydet(Ogrenci ogrenci, String durum, String tarih){
@@ -388,11 +420,17 @@ public class Veritabani extends SQLiteOpenHelper {
                 ogrenci.setOkulno(c.getString(siraNoOkulNo));
                 ogrenci.setAdSoyad(c.getString(siraNoAdSoyad));
                 ogrenci.setDurum(c.getString(siraNoDurum));
-                ogrenci.setTarih(c.getString(siraNoTarih));
+
+                String tarih=c.getString(siraNoTarih);
+
+                Date date=new SimpleDateFormat("yyyy-MM-dd").parse(tarih);
+                ogrenci.setTarih(new SimpleDateFormat("dd.MM.yyyy").format(date));
+
                 ogrenciYoklamaKayitlariList.add(ogrenci);
             }
-        }
-        finally {
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        } finally {
             c.close();
             db.close();
         }

@@ -1,6 +1,7 @@
 package com.egitimyazilim.iletisim.mesajlarvelibilgilendirme;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -48,13 +49,13 @@ public class Siniflar extends AppCompatActivity implements CommSinif, MenuConten
         ActionBar bar = getSupportActionBar();
         bar.hide();
 
-        buttonMenuOpen=(Button)findViewById(R.id.buttonMenuOpen);
-        buttonMenuClose=(Button)findViewById(R.id.buttonMenuClose);
-        TextView textView=(TextView)findViewById(R.id.textViewTitleToolbar);
+        buttonMenuOpen = (Button) findViewById(R.id.buttonMenuOpen);
+        buttonMenuClose = (Button) findViewById(R.id.buttonMenuClose);
+        TextView textView = (TextView) findViewById(R.id.textViewTitleToolbar);
         textView.setText("Sınıflar");
 
         fm = getSupportFragmentManager();
-        menuContentFragment=(MenuContentFragment)fm.findFragmentById(R.id.fragmentMenu);
+        menuContentFragment = (MenuContentFragment) fm.findFragmentById(R.id.fragmentMenu);
         fm.beginTransaction().hide(menuContentFragment).commit();
 
         buttonMenuOpen.setOnClickListener(new View.OnClickListener() {
@@ -74,19 +75,19 @@ public class Siniflar extends AppCompatActivity implements CommSinif, MenuConten
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
-        final String[] depolamaIzni = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE,Manifest.permission.READ_CONTACTS,Manifest.permission.WRITE_CONTACTS,Manifest.permission.CALL_PHONE,Manifest.permission.READ_SMS,Manifest.permission.SEND_SMS,};
+        // final String[] depolamaIzni = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE,Manifest.permission.READ_CONTACTS,Manifest.permission.WRITE_CONTACTS,Manifest.permission.CALL_PHONE,Manifest.permission.READ_SMS,Manifest.permission.SEND_SMS,};
 
-            ActivityCompat.requestPermissions(Siniflar.this, depolamaIzni, 102);
-        
+        // ActivityCompat.requestPermissions(Siniflar.this, depolamaIzni, 102);
+
 
         Button buttonAdd = (Button) findViewById(R.id.buttonSiniflarAdd);
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String[] depolamaIzni = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
-                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(Siniflar.this, depolamaIzni, 102);
-                }
+                // final String[] depolamaIzni = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
+                //if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                //  ActivityCompat.requestPermissions(Siniflar.this, depolamaIzni, 102);
+                // }
                 AlertDialog.Builder builder = new AlertDialog.Builder(Siniflar.this);
                 builder.setPositiveButton("Elle", new DialogInterface.OnClickListener() {
                     @Override
@@ -98,35 +99,8 @@ public class Siniflar extends AppCompatActivity implements CommSinif, MenuConten
                 builder.setNegativeButton("Excel'den", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                            Intent ıntent = new Intent(getApplicationContext(), ExceldenListeAl.class);
-                            startActivity(ıntent);
-                        } else {
-                            if (ActivityCompat.shouldShowRequestPermissionRationale(Siniflar.this, depolamaIzni[0])) {
-                                ActivityCompat.requestPermissions(Siniflar.this, depolamaIzni, 102);
-                            } else {
-                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(Siniflar.this);
-                                builder.setTitle("Dikkat!");
-                                builder.setMessage("Cihazınızdaki Excel dosyasını okuyabilmek için eksik izin var. Depolama iznini vermeniz gereklidir. İzin vermek için <Ayarlar>'a tıklayınız ve açılan sayfadaki izinler bölümüden izin veriniz.");
-                                builder.setPositiveButton("Ayarlar", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent myAppSettings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getApplicationContext().getPackageName()));
-                                        myAppSettings.addCategory(Intent.CATEGORY_DEFAULT);
-                                        myAppSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivityForResult(myAppSettings, 35);
-                                    }
-                                });
-                                builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                                android.app.AlertDialog alertDialog = builder.create();
-                                alertDialog.show();
-                            }
-                        }
+                        Intent ıntent = new Intent(getApplicationContext(), ExceldenListeAl.class);
+                        startActivity(ıntent);
                     }
                 });
                 AlertDialog alertDialog = builder.create();
@@ -212,6 +186,7 @@ public class Siniflar extends AppCompatActivity implements CommSinif, MenuConten
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder=new AlertDialog.Builder(Siniflar.this);
