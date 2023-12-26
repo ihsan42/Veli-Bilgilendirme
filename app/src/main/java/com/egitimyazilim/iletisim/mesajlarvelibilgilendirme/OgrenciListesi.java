@@ -355,25 +355,32 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
                                         }
                                     } else if (radioButtonHazirMesajlarim.isChecked()) {
                                         String mesajim =spinnerHazirMesajlarim.getSelectedItem().toString();
-                                        String hazirmesajim1=mesajim.split(" <ad-soyad> ")[0];
-                                        String hazirmesajim2=mesajim.split(" <ad-soyad> ")[1];
-                                        if (!mesajim.equals("Kayıtlı ders yok!")) {
-                                            if (durumIsim == true && durumBrans == true && durumOkuladi == true) {
-                                                mesaj = hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2 + " [" + kisiselBilgiler.get(0) + " ("+kisiselBilgiler.get(2) +" " + kisiselBilgiler.get(1) + " öğretmeni)]";
-                                            } else if (durumIsim == true && durumBrans == true && durumOkuladi == false) {
-                                                mesaj = hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2 + " [" + kisiselBilgiler.get(0) + " (" + kisiselBilgiler.get(1) + " öğretmeni)]";
-                                            } else if (durumIsim == true && durumBrans == false && durumOkuladi == true) {
-                                                mesaj = hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2 + " ["+kisiselBilgiler.get(2) +" " + kisiselBilgiler.get(0) + "]";
-                                            } else if (durumIsim == true && durumBrans == false && durumOkuladi == false) {
-                                                mesaj = hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2 + " [" + kisiselBilgiler.get(0) + "]";
-                                            } else if (durumIsim == false && durumBrans == true && durumOkuladi == true) {
-                                                mesaj =  hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2 + " ("+kisiselBilgiler.get(2)+" " + kisiselBilgiler.get(1) + " öğretmeni)";
-                                            } else if (durumIsim == false && durumBrans == true && durumOkuladi == false) {
-                                                mesaj = hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2 + " (" + kisiselBilgiler.get(1) + " öğretmeni)";
-                                            } else if (durumIsim == false && durumBrans == false && durumOkuladi == true) {
-                                                mesaj = hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2 + " ("+kisiselBilgiler.get(2)+")";
-                                            } else if (durumIsim == false && durumBrans == false && durumOkuladi == false) {
-                                                mesaj = hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2;
+                                        if(!mesajim.contains(" <ad-soyad> ")){
+                                            Toast.makeText(getApplicationContext(),"Bu taslak mesaj eski versiyonda " +
+                                                    "kaydedilmiş. \"Hazır(Taslak) Mesajlarım\" bölümüne giderek taslak mesajı " +
+                                                    "yeni formatta kaydediniz",Toast.LENGTH_LONG).show();
+                                            break;
+                                        }else{
+                                            String hazirmesajim1=mesajim.split(" <ad-soyad> ")[0];
+                                            String hazirmesajim2=mesajim.split(" <ad-soyad> ")[1];
+                                            if (!mesajim.equals("Kayıtlı ders yok!")) {
+                                                if (durumIsim == true && durumBrans == true && durumOkuladi == true) {
+                                                    mesaj = hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2 + " [" + kisiselBilgiler.get(0) + " ("+kisiselBilgiler.get(2) +" " + kisiselBilgiler.get(1) + " öğretmeni)]";
+                                                } else if (durumIsim == true && durumBrans == true && durumOkuladi == false) {
+                                                    mesaj = hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2 + " [" + kisiselBilgiler.get(0) + " (" + kisiselBilgiler.get(1) + " öğretmeni)]";
+                                                } else if (durumIsim == true && durumBrans == false && durumOkuladi == true) {
+                                                    mesaj = hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2 + " ["+kisiselBilgiler.get(2) +" " + kisiselBilgiler.get(0) + "]";
+                                                } else if (durumIsim == true && durumBrans == false && durumOkuladi == false) {
+                                                    mesaj = hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2 + " [" + kisiselBilgiler.get(0) + "]";
+                                                } else if (durumIsim == false && durumBrans == true && durumOkuladi == true) {
+                                                    mesaj =  hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2 + " ("+kisiselBilgiler.get(2)+" " + kisiselBilgiler.get(1) + " öğretmeni)";
+                                                } else if (durumIsim == false && durumBrans == true && durumOkuladi == false) {
+                                                    mesaj = hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2 + " (" + kisiselBilgiler.get(1) + " öğretmeni)";
+                                                } else if (durumIsim == false && durumBrans == false && durumOkuladi == true) {
+                                                    mesaj = hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2 + " ("+kisiselBilgiler.get(2)+")";
+                                                } else if (durumIsim == false && durumBrans == false && durumOkuladi == false) {
+                                                    mesaj = hazirmesajim1+" "+ ogrenci.getAdSoyad() + " " + hazirmesajim2;
+                                                }
                                             }
                                         }
                                     }
@@ -388,8 +395,10 @@ public class OgrenciListesi extends AppCompatActivity implements CommOgr, MenuCo
                                     }
                                     if (radioButtonOdev.isChecked() && dersadi.equals("Kayıtlı ders yok!")) {
                                         Toast.makeText(getApplicationContext(), "Kayıtlı ders yok!", Toast.LENGTH_SHORT).show();
+                                        break;
                                     } else if (radioButtonHazirMesajlarim.isChecked() && mesajim.equals("Kayıtlı hazır mesaj yok!")) {
                                         Toast.makeText(getApplicationContext(), "Kayıtlı hazır mesaj yok!!", Toast.LENGTH_SHORT).show();
+                                        break;
                                     } else {
                                         SMSGonder.gonder(getApplicationContext(), smsManager[0]
                                                 , ogrenci.getTelno(), mesaj, ogrenci.getAdSoyad());

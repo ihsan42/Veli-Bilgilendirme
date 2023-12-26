@@ -172,24 +172,6 @@ import java.util.Set;
          super.onStop();
          getActivity().unregisterReceiver(receiver);
      }
-
-    private boolean checkDefaultSMSapp() {
-        boolean isDefault = false;
-        final String myPackageName = String.valueOf(getActivity().getPackageName());
-        if (String.valueOf(Telephony.Sms.getDefaultSmsPackage(getActivity())).equals(myPackageName)) {
-            isDefault = true;
-        }
-        return isDefault;
-    }
-
-    private void requestDefaultSMSapp() {
-        final String myPackageName = getActivity().getPackageName();
-        Intent intent =
-                new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
-        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
-                myPackageName);
-        startActivityForResult(intent, requestDefaultSmsAppCode);
-    }
     public List<Chats> getAllSms(Cursor c) {
 
         List<Chats> chatsList = new ArrayList<Chats>();

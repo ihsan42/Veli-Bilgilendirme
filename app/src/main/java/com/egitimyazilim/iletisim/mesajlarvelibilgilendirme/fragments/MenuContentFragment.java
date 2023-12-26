@@ -55,6 +55,7 @@ public class MenuContentFragment extends Fragment {
         menuButtonList.add("E-Okul");
         menuButtonList.add("Ayarlar");
         menuButtonList.add("Yardımcı Videolar");
+        menuButtonList.add("Gizlilik Politikamız");
 
         AdapterForMenuContent adapter=new AdapterForMenuContent(getActivity(),menuButtonList);
         listView.setAdapter(adapter);
@@ -157,6 +158,9 @@ public class MenuContentFragment extends Fragment {
                             comm.menuButtonsVisibility();
                         }
                         break;*/
+                    case 9:
+                        Intent browserIntent3 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ihsan4246.wixsite.com/okul-veli-sms"));
+                        startActivity(browserIntent3);
                 }
             }
         });

@@ -61,7 +61,7 @@
         android:textColor="@color/colorTitleText" />
 
     <ListView
-        android:background="@color/colorAccentLight"
+        android:background="@color/colorMyLightGreen"
         android:id="@+id/listViewKayitliMesajlarim"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -79,7 +79,7 @@
         android:layout_below="@+id/buttonMesajiKaydet"
         android:text="Kayıtlı Hazır Mesajlarım"
         android:textColor="@android:color/black"
-        android:background="@color/colorAccent"
+        android:background="@color/colorMyDarkGreen"
         android:textStyle="bold" />
 
     <fragment

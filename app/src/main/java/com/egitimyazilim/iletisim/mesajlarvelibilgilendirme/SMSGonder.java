@@ -2,31 +2,23 @@ package com.egitimyazilim.iletisim.mesajlarvelibilgilendirme;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Telephony;
 import android.telephony.SmsManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
-import android.telephony.TelephonyManager;
 import android.widget.Toast;
-
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
 
 import com.egitimyazilim.iletisim.mesajlarvelibilgilendirme.contentprovider.MessagesContentProviderHandler;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class SMSGonder {
 

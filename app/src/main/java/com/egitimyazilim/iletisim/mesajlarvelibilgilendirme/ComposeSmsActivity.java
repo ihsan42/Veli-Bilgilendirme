@@ -98,7 +98,7 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
         if(nerdengeldi!=null&&nerdengeldi.equals("listedengelen")){
             editTextAlici.setEnabled(false);
         }*/
-       // varsayilanMi = checkDefaultSMSapp();
+        varsayilanMi = checkDefaultSMSapp();
 
         char[] chars = kisiTel.toCharArray();
 
@@ -123,11 +123,9 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
         }*/
 
         // editTextAlici.setText(kisiTel);
-       // if (izinlerTamamMi == true) {
             mCallbacks = this;
             LoaderManager loaderManager = getSupportLoaderManager();
             loaderManager.initLoader(1, null, mCallbacks);
-       // }
 
 
         buttonGonder.setOnClickListener(new View.OnClickListener() {
@@ -145,24 +143,19 @@ public class ComposeSmsActivity extends AppCompatActivity implements LoaderManag
         });
     }
 
-   /* @Override
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        varsayilanMi=checkDefaultSMSapp();
+        varsayilanMi = checkDefaultSMSapp();
         if (varsayilanMi == false) {
-            Toast.makeText(getApplicationContext(),"Mesaj gönderebilmek için bu uygulamanın varsayılan sms uygulaması olması gerekir!",Toast.LENGTH_LONG).show();
-        }else{
-            izinlerTamamMi = checkPermission();
-            if(izinlerTamamMi==true){
-                mCallbacks=this;
+            Toast.makeText(getApplicationContext(), "Mesaj gönderebilmek için bu uygulamanın varsayılan sms uygulaması olması gerekir!", Toast.LENGTH_LONG).show();
+        } else {
+                mCallbacks = this;
 
-                LoaderManager loaderManager=getSupportLoaderManager();
-                loaderManager.initLoader(1,null,mCallbacks);
-            }else{
-                Toast.makeText(getApplicationContext(),"Mesajları görüntüleyebilmek için istenilen izinleri vermeniz gerekir!",Toast.LENGTH_LONG).show();
-            }
-        }*/
-
+                LoaderManager loaderManager = getSupportLoaderManager();
+                loaderManager.initLoader(1, null, mCallbacks);
+        }
+    }
     private List<Chats> getAllSms(Cursor c) {
         List<Chats> chatsList = new ArrayList<Chats>();
         Chats objChats = null;

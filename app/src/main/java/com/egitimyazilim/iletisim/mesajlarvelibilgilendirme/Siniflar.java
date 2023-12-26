@@ -84,10 +84,6 @@ public class Siniflar extends AppCompatActivity implements CommSinif, MenuConten
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // final String[] depolamaIzni = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
-                //if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                //  ActivityCompat.requestPermissions(Siniflar.this, depolamaIzni, 102);
-                // }
                 AlertDialog.Builder builder = new AlertDialog.Builder(Siniflar.this);
                 builder.setPositiveButton("Elle", new DialogInterface.OnClickListener() {
                     @Override
